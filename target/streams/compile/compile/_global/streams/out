@@ -1,0 +1,15 @@
+[0m[[0m[31merror[0m] [0m[0mC:\Users\silas\Desktop\chisel-lab-master\chisel-lab-master\vending\src\main\scala\VendingMachine.scala:43:24: overloaded method apply with alternatives:[0m
+[0m[[0m[31merror[0m] [0m[0m  (x: chisel3.UInt)chisel3.Bool <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (x: Int)chisel3.Bool <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (x: BigInt)chisel3.Bool[0m
+[0m[[0m[31merror[0m] [0m[0m cannot be applied to (Unit)[0m
+[0m[[0m[31merror[0m] [0m[0m  }elsewhen(buy_change && enough) {[0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\silas\Desktop\chisel-lab-master\chisel-lab-master\vending\src\main\scala\VendingMachine.scala:45:24: overloaded method apply with alternatives:[0m
+[0m[[0m[31merror[0m] [0m[0m  (x: chisel3.UInt)chisel3.Bool <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (x: Int)chisel3.Bool <and>[0m
+[0m[[0m[31merror[0m] [0m[0m  (x: BigInt)chisel3.Bool[0m
+[0m[[0m[31merror[0m] [0m[0m cannot be applied to (Unit)[0m
+[0m[[0m[31merror[0m] [0m[0m  }elsewhen(buy_change && !enough) {[0m
+[0m[[0m[31merror[0m] [0m[0m                       ^[0m
+[0m[[0m[31merror[0m] [0m[0mtwo errors found[0m
