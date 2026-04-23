@@ -7,13 +7,28 @@ class SerialCommunicator extends Module {
         val price = Input(UInt(5.W))
         val sum = Input(UInt(8.W))
         val update = Input(Bool())
+        val tx = Output(Bool())
     })
 
+
+    def uintToAscii(value: UInt): Seq[UInt] = {
+        val hundreds = (value / 100.U) % 10.U
+        val tens     = (value / 10.U) % 10.U
+        val ones     = value % 10.U
+        Seq(hundreds + 48.U, tens + 48.U, ones + 48.U)
+    }
+
     val uart = Module(new BufferedTx(100000000, 115200))
+    io.tx := uart.io.txd
 
-    val formattedPrice = VecInit('P'.U, 'r'.U, 'i'.U, 'c'.U, 'e'.U, ':'.U, ' '.U, io.price, ' '.U, 'A'.U, 'T'.U, 'S'.U, '\n'.U)
-    val formattedSum = VecInit('I'.U, 'n'.U, 's'.U, 'e'.U, 'r'.U, 't'.U, 'e'.U, 'd'.U, ':'.U, ' '.U, io.sum, ' '.U, 'A'.U, 'T'.U, 'S'.U, '\n'.U)
+    val formattedPrice = VecInit(Seq(
+        'P'.U, 'r'.U, 'i'.U, 'c'.U, 'e'.U, ':'.U, ' '.U
+    ) ++ uintToAscii(io.price) ++ Seq(' '.U, 'A'.U, 'T'.U, 'S'.U, '\n'.U))
 
+    val formattedSum = VecInit(Seq(
+        'I'.U, 'n'.U, 's'.U, 'e'.U, 'r'.U, 't'.U, 'e'.U, 'd'.U, ':'.U, ' '.U
+    ) ++ uintToAscii(io.sum) ++ Seq(' '.U, 'A'.U, 'T'.U, 'S'.U, '\n'.U))
+    
     // 00 = no write
     // 01 = write price
     // 10 = write sum
@@ -32,7 +47,7 @@ class SerialCommunicator extends Module {
     uart.io.channel.bits  := 0.U
 
     when (write === "b01".U) {
-        when (index <= formattedPrice.length.U) {
+        when (index < formattedPrice.length.U) {
             uart.io.channel.valid := true.B
             uart.io.channel.bits := formattedPrice(index)
 
@@ -46,7 +61,7 @@ class SerialCommunicator extends Module {
 
     } .elsewhen (write === "b10".U) {
 
-        when (index <= formattedSum.length.U) {
+        when (index < formattedSum.length.U) {
             uart.io.channel.valid := true.B
             uart.io.channel.bits := formattedSum(index)
 
