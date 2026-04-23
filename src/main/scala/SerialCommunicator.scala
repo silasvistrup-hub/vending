@@ -29,10 +29,12 @@ class SerialCommunicator extends Module {
         'I'.U, 'n'.U, 's'.U, 'e'.U, 'r'.U, 't'.U, 'e'.U, 'd'.U, ':'.U, ' '.U
     ) ++ uintToAscii(io.sum) ++ Seq(' '.U, 'A'.U, 'T'.U, 'S'.U, '\n'.U))
     
+    val clearCmd = VecInit(27.U, '['.U, '2'.U, 'J'.U, 27.U, '['.U, 'H'.U)
+
     // 00 = no write
-    // 01 = write price
-    // 10 = write sum
-    // 11 = write space
+    // 01 = clear screen
+    // 10 = write price
+    // 11 = write sum
     val write = RegInit(0.U(2.W)) 
     val refresh = RegInit(false.B) 
     val index = RegInit(0.U(8.W))
@@ -49,7 +51,7 @@ class SerialCommunicator extends Module {
     when (write === "b01".U) {
         when (index < formattedPrice.length.U) {
             uart.io.channel.valid := true.B
-            uart.io.channel.bits := formattedPrice(index)
+            uart.io.channel.bits := clearCmd(index)
 
             when(uart.io.channel.ready) {
                 index := index + 1.U
@@ -58,12 +60,10 @@ class SerialCommunicator extends Module {
             index := 0.U
             write := "b10".U
         }
-
     } .elsewhen (write === "b10".U) {
-
-        when (index < formattedSum.length.U) {
+        when (index < formattedPrice.length.U) {
             uart.io.channel.valid := true.B
-            uart.io.channel.bits := formattedSum(index)
+            uart.io.channel.bits := formattedPrice(index)
 
             when(uart.io.channel.ready) {
                 index := index + 1.U
@@ -74,11 +74,10 @@ class SerialCommunicator extends Module {
         }
 
     } .elsewhen (write === "b11".U) {
-        uart.io.channel.valid := true.B
-        uart.io.channel.bits := '\n'.U
 
-        when(uart.io.channel.ready) {
-            index := 0.U
+        when (index < formattedSum.length.U) {
+            uart.io.channel.valid := true.B
+            uart.io.channel.bits := formattedSum(index)
 
             when(refresh) {
                 write := "b01".U
@@ -86,6 +85,9 @@ class SerialCommunicator extends Module {
             } .otherwise {
                 write := "b00".U
             }
+        } .otherwise {
+            index := 0.U
+            write := "b00".U
         }
     }
 }

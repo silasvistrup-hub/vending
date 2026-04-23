@@ -11,6 +11,7 @@ class VendingMachine(maxCount: Int) extends Module {
     val alarm = Output(Bool())
     val seg = Output(UInt(7.W))
     val an = Output(UInt(4.W))
+    val tx = Output(Bool())
   })
 
   val DisplayMultiplexer = Module(new DisplayMultiplexer(maxCount))
@@ -34,6 +35,7 @@ class VendingMachine(maxCount: Int) extends Module {
   SerialComs.io.price := io.price
   SerialComs.io.sum := Value
   SerialComs.io.update := coin2_change || coin5_change || buy_change
+  io.tx := SerialComs.io.tx
 
   when(coin2_change && !Full2) {
     Value := Value + 2.U

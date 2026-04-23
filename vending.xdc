@@ -49,6 +49,13 @@ set_property PACKAGE_PIN L1  [get_ports {io_releaseCan}]
 set_property PACKAGE_PIN T17 [get_ports reset]
 
 
+##USB-RS232 Interface
+set_property PACKAGE_PIN A18 [get_ports io_tx]
+set_property PACKAGE_PIN B18 [get_ports io_rx]
+
+#set_property PACKAGE_PIN B18 [get_ports RsRx]
+#set_property PACKAGE_PIN A18 [get_ports RsTx]
+
 ## Pmod in lower row
 # BTN0
 set_property PACKAGE_PIN W19 [get_ports {io_coin2}]
