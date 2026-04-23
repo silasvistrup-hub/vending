@@ -311,8 +311,8 @@ circuit VendingMachine :
     uart.io.channel.bits <= UInt<1>("h0") @[src/main/scala/SerialCommunicator.scala 49:27]
     node _T_4 = eq(write, UInt<1>("h1")) @[src/main/scala/SerialCommunicator.scala 51:17]
     when _T_4 : @[src/main/scala/SerialCommunicator.scala 51:30]
-      node _T_5 = lt(index, UInt<4>("hf")) @[src/main/scala/SerialCommunicator.scala 52:21]
-      when _T_5 : @[src/main/scala/SerialCommunicator.scala 52:48]
+      node _T_5 = lt(index, UInt<3>("h7")) @[src/main/scala/SerialCommunicator.scala 52:21]
+      when _T_5 : @[src/main/scala/SerialCommunicator.scala 52:42]
         uart.io.channel.valid <= UInt<1>("h1") @[src/main/scala/SerialCommunicator.scala 53:35]
         node _uart_io_channel_bits_T = bits(index, 2, 0)
         uart.io.channel.bits <= clearCmd[_uart_io_channel_bits_T] @[src/main/scala/SerialCommunicator.scala 54:34]
@@ -339,21 +339,24 @@ circuit VendingMachine :
           index <= UInt<1>("h0") @[src/main/scala/SerialCommunicator.scala 72:19]
           write <= UInt<2>("h3") @[src/main/scala/SerialCommunicator.scala 73:19]
       else :
-        node _T_8 = eq(write, UInt<2>("h3")) @[src/main/scala/SerialCommunicator.scala 76:24]
-        when _T_8 : @[src/main/scala/SerialCommunicator.scala 76:37]
-          node _T_9 = lt(index, UInt<5>("h12")) @[src/main/scala/SerialCommunicator.scala 78:21]
-          when _T_9 : @[src/main/scala/SerialCommunicator.scala 78:46]
-            uart.io.channel.valid <= UInt<1>("h1") @[src/main/scala/SerialCommunicator.scala 79:35]
+        node _T_8 = eq(write, UInt<2>("h3")) @[src/main/scala/SerialCommunicator.scala 75:24]
+        when _T_8 : @[src/main/scala/SerialCommunicator.scala 75:37]
+          node _T_9 = lt(index, UInt<5>("h12")) @[src/main/scala/SerialCommunicator.scala 76:21]
+          when _T_9 : @[src/main/scala/SerialCommunicator.scala 76:46]
+            uart.io.channel.valid <= UInt<1>("h1") @[src/main/scala/SerialCommunicator.scala 77:35]
             node _uart_io_channel_bits_T_2 = bits(index, 4, 0)
-            uart.io.channel.bits <= formattedSum[_uart_io_channel_bits_T_2] @[src/main/scala/SerialCommunicator.scala 80:34]
-            when refresh : @[src/main/scala/SerialCommunicator.scala 82:27]
-              write <= UInt<1>("h1") @[src/main/scala/SerialCommunicator.scala 83:23]
-              refresh <= UInt<1>("h0") @[src/main/scala/SerialCommunicator.scala 84:25]
-            else :
-              write <= UInt<1>("h0") @[src/main/scala/SerialCommunicator.scala 86:23]
+            uart.io.channel.bits <= formattedSum[_uart_io_channel_bits_T_2] @[src/main/scala/SerialCommunicator.scala 78:34]
+            when uart.io.channel.ready : @[src/main/scala/SerialCommunicator.scala 80:41]
+              node _index_T_4 = add(index, UInt<1>("h1")) @[src/main/scala/SerialCommunicator.scala 81:32]
+              node _index_T_5 = tail(_index_T_4, 1) @[src/main/scala/SerialCommunicator.scala 81:32]
+              index <= _index_T_5 @[src/main/scala/SerialCommunicator.scala 81:23]
           else :
-            index <= UInt<1>("h0") @[src/main/scala/SerialCommunicator.scala 89:19]
-            write <= UInt<1>("h0") @[src/main/scala/SerialCommunicator.scala 90:19]
+            index <= UInt<1>("h0") @[src/main/scala/SerialCommunicator.scala 84:19]
+            when refresh : @[src/main/scala/SerialCommunicator.scala 86:27]
+              write <= UInt<1>("h1") @[src/main/scala/SerialCommunicator.scala 87:23]
+              refresh <= UInt<1>("h0") @[src/main/scala/SerialCommunicator.scala 88:25]
+            else :
+              write <= UInt<1>("h0") @[src/main/scala/SerialCommunicator.scala 90:23]
 
 
   module VendingMachine :

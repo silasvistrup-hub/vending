@@ -49,7 +49,7 @@ class SerialCommunicator extends Module {
     uart.io.channel.bits  := 0.U
 
     when (write === "b01".U) {
-        when (index < formattedPrice.length.U) {
+        when (index < clearCmd.length.U) { 
             uart.io.channel.valid := true.B
             uart.io.channel.bits := clearCmd(index)
 
@@ -72,22 +72,23 @@ class SerialCommunicator extends Module {
             index := 0.U
             write := "b11".U
         }
-
     } .elsewhen (write === "b11".U) {
-
         when (index < formattedSum.length.U) {
             uart.io.channel.valid := true.B
             uart.io.channel.bits := formattedSum(index)
 
-            when(refresh) {
-                write := "b01".U
-                refresh := false.B
-            } .otherwise {
-                write := "b00".U
+            when(uart.io.channel.ready) {
+                index := index + 1.U
             }
         } .otherwise {
             index := 0.U
-            write := "b00".U
+            
+            when(refresh) {
+                write := "b01".U 
+                refresh := false.B
+            } .otherwise {
+                write := "b00".U 
+            }
         }
     }
 }

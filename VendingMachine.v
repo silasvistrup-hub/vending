@@ -386,26 +386,26 @@ module SerialCommunicator(
   wire [3:0] formattedPrice_tens = _GEN_12[3:0]; // @[src/main/scala/SerialCommunicator.scala 16:39]
   wire [4:0] _GEN_16 = io_price % 5'ha; // @[src/main/scala/SerialCommunicator.scala 17:30]
   wire [3:0] formattedPrice_ones = _GEN_16[3:0]; // @[src/main/scala/SerialCommunicator.scala 17:30]
-  wire [5:0] _GEN_76 = {{2'd0}, formattedPrice_hundreds}; // @[src/main/scala/SerialCommunicator.scala 18:22]
-  wire [5:0] _formattedPrice_T_1 = _GEN_76 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:22]
-  wire [5:0] _GEN_77 = {{2'd0}, formattedPrice_tens}; // @[src/main/scala/SerialCommunicator.scala 18:35]
-  wire [5:0] _formattedPrice_T_3 = _GEN_77 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:35]
-  wire [5:0] _GEN_78 = {{2'd0}, formattedPrice_ones}; // @[src/main/scala/SerialCommunicator.scala 18:48]
-  wire [5:0] _formattedPrice_T_5 = _GEN_78 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:48]
+  wire [5:0] _GEN_77 = {{2'd0}, formattedPrice_hundreds}; // @[src/main/scala/SerialCommunicator.scala 18:22]
+  wire [5:0] _formattedPrice_T_1 = _GEN_77 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:22]
+  wire [5:0] _GEN_78 = {{2'd0}, formattedPrice_tens}; // @[src/main/scala/SerialCommunicator.scala 18:35]
+  wire [5:0] _formattedPrice_T_3 = _GEN_78 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:35]
+  wire [5:0] _GEN_79 = {{2'd0}, formattedPrice_ones}; // @[src/main/scala/SerialCommunicator.scala 18:48]
+  wire [5:0] _formattedPrice_T_5 = _GEN_79 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:48]
   wire [7:0] _formattedSum_hundreds_T = io_sum / 7'h64; // @[src/main/scala/SerialCommunicator.scala 15:31]
   wire [7:0] _GEN_31 = _formattedSum_hundreds_T % 8'ha; // @[src/main/scala/SerialCommunicator.scala 15:40]
   wire [3:0] formattedSum_hundreds = _GEN_31[3:0]; // @[src/main/scala/SerialCommunicator.scala 15:40]
   wire [7:0] _formattedSum_tens_T = io_sum / 4'ha; // @[src/main/scala/SerialCommunicator.scala 16:31]
   wire [7:0] _GEN_32 = _formattedSum_tens_T % 8'ha; // @[src/main/scala/SerialCommunicator.scala 16:39]
   wire [3:0] formattedSum_tens = _GEN_32[3:0]; // @[src/main/scala/SerialCommunicator.scala 16:39]
-  wire [7:0] _GEN_34 = io_sum % 8'ha; // @[src/main/scala/SerialCommunicator.scala 17:30]
-  wire [3:0] formattedSum_ones = _GEN_34[3:0]; // @[src/main/scala/SerialCommunicator.scala 17:30]
-  wire [5:0] _GEN_79 = {{2'd0}, formattedSum_hundreds}; // @[src/main/scala/SerialCommunicator.scala 18:22]
-  wire [5:0] _formattedSum_T_1 = _GEN_79 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:22]
-  wire [5:0] _GEN_80 = {{2'd0}, formattedSum_tens}; // @[src/main/scala/SerialCommunicator.scala 18:35]
-  wire [5:0] _formattedSum_T_3 = _GEN_80 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:35]
-  wire [5:0] _GEN_81 = {{2'd0}, formattedSum_ones}; // @[src/main/scala/SerialCommunicator.scala 18:48]
-  wire [5:0] _formattedSum_T_5 = _GEN_81 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:48]
+  wire [7:0] _GEN_36 = io_sum % 8'ha; // @[src/main/scala/SerialCommunicator.scala 17:30]
+  wire [3:0] formattedSum_ones = _GEN_36[3:0]; // @[src/main/scala/SerialCommunicator.scala 17:30]
+  wire [5:0] _GEN_80 = {{2'd0}, formattedSum_hundreds}; // @[src/main/scala/SerialCommunicator.scala 18:22]
+  wire [5:0] _formattedSum_T_1 = _GEN_80 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:22]
+  wire [5:0] _GEN_81 = {{2'd0}, formattedSum_tens}; // @[src/main/scala/SerialCommunicator.scala 18:35]
+  wire [5:0] _formattedSum_T_3 = _GEN_81 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:35]
+  wire [5:0] _GEN_82 = {{2'd0}, formattedSum_ones}; // @[src/main/scala/SerialCommunicator.scala 18:48]
+  wire [5:0] _formattedSum_T_5 = _GEN_82 + 6'h30; // @[src/main/scala/SerialCommunicator.scala 18:48]
   reg [1:0] write; // @[src/main/scala/SerialCommunicator.scala 38:24]
   reg  refresh; // @[src/main/scala/SerialCommunicator.scala 39:26]
   reg [7:0] index; // @[src/main/scala/SerialCommunicator.scala 40:24]
@@ -413,7 +413,7 @@ module SerialCommunicator(
   wire [7:0] _GEN_1 = io_update & write == 2'h0 ? 8'h0 : index; // @[src/main/scala/SerialCommunicator.scala 41:39 42:15 40:24]
   wire [1:0] _GEN_2 = io_update & write == 2'h0 ? 2'h1 : write; // @[src/main/scala/SerialCommunicator.scala 41:39 43:15 38:24]
   wire  _GEN_3 = io_update & write == 2'h0 ? refresh : _GEN_0; // @[src/main/scala/SerialCommunicator.scala 39:26 41:39]
-  wire  _T_5 = index < 8'hf; // @[src/main/scala/SerialCommunicator.scala 52:21]
+  wire  _T_5 = index < 8'h7; // @[src/main/scala/SerialCommunicator.scala 52:21]
   wire [6:0] _GEN_5 = 3'h1 == index[2:0] ? 7'h5b : 7'h1b; // @[src/main/scala/SerialCommunicator.scala 54:{34,34}]
   wire [6:0] _GEN_6 = 3'h2 == index[2:0] ? 7'h32 : _GEN_5; // @[src/main/scala/SerialCommunicator.scala 54:{34,34}]
   wire [6:0] _GEN_7 = 3'h3 == index[2:0] ? 7'h4a : _GEN_6; // @[src/main/scala/SerialCommunicator.scala 54:{34,34}]
@@ -422,8 +422,8 @@ module SerialCommunicator(
   wire [6:0] _GEN_10 = 3'h6 == index[2:0] ? 7'h48 : _GEN_9; // @[src/main/scala/SerialCommunicator.scala 54:{34,34}]
   wire [7:0] _index_T_1 = index + 8'h1; // @[src/main/scala/SerialCommunicator.scala 57:32]
   wire [7:0] _GEN_11 = uart_io_channel_ready ? _index_T_1 : _GEN_1; // @[src/main/scala/SerialCommunicator.scala 56:41 57:23]
-  wire [6:0] _GEN_13 = index < 8'hf ? _GEN_10 : 7'h0; // @[src/main/scala/SerialCommunicator.scala 49:27 52:48 54:34]
-  wire [7:0] _GEN_14 = index < 8'hf ? _GEN_11 : 8'h0; // @[src/main/scala/SerialCommunicator.scala 52:48 60:19]
+  wire [6:0] _GEN_13 = index < 8'h7 ? _GEN_10 : 7'h0; // @[src/main/scala/SerialCommunicator.scala 49:27 52:42 54:34]
+  wire  _T_7 = index < 8'hf; // @[src/main/scala/SerialCommunicator.scala 64:21]
   wire [6:0] _GEN_17 = 4'h1 == index[3:0] ? 7'h72 : 7'h50; // @[src/main/scala/SerialCommunicator.scala 66:{34,34}]
   wire [6:0] _GEN_18 = 4'h2 == index[3:0] ? 7'h69 : _GEN_17; // @[src/main/scala/SerialCommunicator.scala 66:{34,34}]
   wire [6:0] _GEN_19 = 4'h3 == index[3:0] ? 7'h63 : _GEN_18; // @[src/main/scala/SerialCommunicator.scala 66:{34,34}]
@@ -441,38 +441,38 @@ module SerialCommunicator(
   wire [6:0] _GEN_28 = 4'hc == index[3:0] ? 7'h54 : _GEN_27; // @[src/main/scala/SerialCommunicator.scala 66:{34,34}]
   wire [6:0] _GEN_29 = 4'hd == index[3:0] ? 7'h53 : _GEN_28; // @[src/main/scala/SerialCommunicator.scala 66:{34,34}]
   wire [6:0] _GEN_30 = 4'he == index[3:0] ? 7'ha : _GEN_29; // @[src/main/scala/SerialCommunicator.scala 66:{34,34}]
-  wire [6:0] _GEN_33 = _T_5 ? _GEN_30 : 7'h0; // @[src/main/scala/SerialCommunicator.scala 49:27 64:48 66:34]
-  wire  _T_9 = index < 8'h12; // @[src/main/scala/SerialCommunicator.scala 78:21]
-  wire [6:0] _GEN_37 = 5'h1 == index[4:0] ? 7'h6e : 7'h49; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_38 = 5'h2 == index[4:0] ? 7'h73 : _GEN_37; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_39 = 5'h3 == index[4:0] ? 7'h65 : _GEN_38; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_40 = 5'h4 == index[4:0] ? 7'h72 : _GEN_39; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_41 = 5'h5 == index[4:0] ? 7'h74 : _GEN_40; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_42 = 5'h6 == index[4:0] ? 7'h65 : _GEN_41; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_43 = 5'h7 == index[4:0] ? 7'h64 : _GEN_42; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_44 = 5'h8 == index[4:0] ? 7'h3a : _GEN_43; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_45 = 5'h9 == index[4:0] ? 7'h20 : _GEN_44; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
+  wire [6:0] _GEN_33 = index < 8'hf ? _GEN_30 : 7'h0; // @[src/main/scala/SerialCommunicator.scala 49:27 64:48 66:34]
+  wire  _T_9 = index < 8'h12; // @[src/main/scala/SerialCommunicator.scala 76:21]
+  wire [6:0] _GEN_37 = 5'h1 == index[4:0] ? 7'h6e : 7'h49; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_38 = 5'h2 == index[4:0] ? 7'h73 : _GEN_37; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_39 = 5'h3 == index[4:0] ? 7'h65 : _GEN_38; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_40 = 5'h4 == index[4:0] ? 7'h72 : _GEN_39; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_41 = 5'h5 == index[4:0] ? 7'h74 : _GEN_40; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_42 = 5'h6 == index[4:0] ? 7'h65 : _GEN_41; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_43 = 5'h7 == index[4:0] ? 7'h64 : _GEN_42; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_44 = 5'h8 == index[4:0] ? 7'h3a : _GEN_43; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_45 = 5'h9 == index[4:0] ? 7'h20 : _GEN_44; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
   wire [6:0] formattedSum_10 = {{1'd0}, _formattedSum_T_1}; // @[src/main/scala/SerialCommunicator.scala 28:{31,31}]
-  wire [6:0] _GEN_46 = 5'ha == index[4:0] ? formattedSum_10 : _GEN_45; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
+  wire [6:0] _GEN_46 = 5'ha == index[4:0] ? formattedSum_10 : _GEN_45; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
   wire [6:0] formattedSum_11 = {{1'd0}, _formattedSum_T_3}; // @[src/main/scala/SerialCommunicator.scala 28:{31,31}]
-  wire [6:0] _GEN_47 = 5'hb == index[4:0] ? formattedSum_11 : _GEN_46; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
+  wire [6:0] _GEN_47 = 5'hb == index[4:0] ? formattedSum_11 : _GEN_46; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
   wire [6:0] formattedSum_12 = {{1'd0}, _formattedSum_T_5}; // @[src/main/scala/SerialCommunicator.scala 28:{31,31}]
-  wire [6:0] _GEN_48 = 5'hc == index[4:0] ? formattedSum_12 : _GEN_47; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_49 = 5'hd == index[4:0] ? 7'h20 : _GEN_48; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_50 = 5'he == index[4:0] ? 7'h41 : _GEN_49; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_51 = 5'hf == index[4:0] ? 7'h54 : _GEN_50; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_52 = 5'h10 == index[4:0] ? 7'h53 : _GEN_51; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire [6:0] _GEN_53 = 5'h11 == index[4:0] ? 7'ha : _GEN_52; // @[src/main/scala/SerialCommunicator.scala 80:{34,34}]
-  wire  _GEN_55 = refresh ? 1'h0 : _GEN_3; // @[src/main/scala/SerialCommunicator.scala 82:27 84:25]
-  wire [6:0] _GEN_57 = index < 8'h12 ? _GEN_53 : 7'h0; // @[src/main/scala/SerialCommunicator.scala 49:27 78:46 80:34]
-  wire  _GEN_58 = index < 8'h12 & refresh; // @[src/main/scala/SerialCommunicator.scala 78:46 90:19]
-  wire  _GEN_59 = index < 8'h12 ? _GEN_55 : _GEN_3; // @[src/main/scala/SerialCommunicator.scala 78:46]
-  wire [7:0] _GEN_60 = index < 8'h12 ? _GEN_1 : 8'h0; // @[src/main/scala/SerialCommunicator.scala 78:46 89:19]
-  wire  _GEN_61 = write == 2'h3 & _T_9; // @[src/main/scala/SerialCommunicator.scala 48:27 76:37]
-  wire [6:0] _GEN_62 = write == 2'h3 ? _GEN_57 : 7'h0; // @[src/main/scala/SerialCommunicator.scala 49:27 76:37]
-  wire  _GEN_66 = write == 2'h2 ? _T_5 : _GEN_61; // @[src/main/scala/SerialCommunicator.scala 63:37]
-  wire [6:0] _GEN_67 = write == 2'h2 ? _GEN_33 : _GEN_62; // @[src/main/scala/SerialCommunicator.scala 63:37]
-  wire [6:0] _GEN_72 = write == 2'h1 ? _GEN_13 : _GEN_67; // @[src/main/scala/SerialCommunicator.scala 51:30]
+  wire [6:0] _GEN_48 = 5'hc == index[4:0] ? formattedSum_12 : _GEN_47; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_49 = 5'hd == index[4:0] ? 7'h20 : _GEN_48; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_50 = 5'he == index[4:0] ? 7'h41 : _GEN_49; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_51 = 5'hf == index[4:0] ? 7'h54 : _GEN_50; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_52 = 5'h10 == index[4:0] ? 7'h53 : _GEN_51; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire [6:0] _GEN_53 = 5'h11 == index[4:0] ? 7'ha : _GEN_52; // @[src/main/scala/SerialCommunicator.scala 78:{34,34}]
+  wire  _GEN_56 = refresh ? 1'h0 : _GEN_3; // @[src/main/scala/SerialCommunicator.scala 86:27 88:25]
+  wire [6:0] _GEN_58 = index < 8'h12 ? _GEN_53 : 7'h0; // @[src/main/scala/SerialCommunicator.scala 49:27 76:46 78:34]
+  wire [7:0] _GEN_59 = index < 8'h12 ? _GEN_11 : 8'h0; // @[src/main/scala/SerialCommunicator.scala 76:46 84:19]
+  wire [1:0] _GEN_60 = index < 8'h12 ? _GEN_2 : {{1'd0}, refresh}; // @[src/main/scala/SerialCommunicator.scala 76:46]
+  wire  _GEN_61 = index < 8'h12 ? _GEN_3 : _GEN_56; // @[src/main/scala/SerialCommunicator.scala 76:46]
+  wire  _GEN_62 = write == 2'h3 & _T_9; // @[src/main/scala/SerialCommunicator.scala 48:27 75:37]
+  wire [6:0] _GEN_63 = write == 2'h3 ? _GEN_58 : 7'h0; // @[src/main/scala/SerialCommunicator.scala 49:27 75:37]
+  wire  _GEN_67 = write == 2'h2 ? _T_7 : _GEN_62; // @[src/main/scala/SerialCommunicator.scala 63:37]
+  wire [6:0] _GEN_68 = write == 2'h2 ? _GEN_33 : _GEN_63; // @[src/main/scala/SerialCommunicator.scala 63:37]
+  wire [6:0] _GEN_73 = write == 2'h1 ? _GEN_13 : _GEN_68; // @[src/main/scala/SerialCommunicator.scala 51:30]
   BufferedTx uart ( // @[src/main/scala/SerialCommunicator.scala 21:22]
     .clock(uart_clock),
     .reset(uart_reset),
@@ -484,25 +484,25 @@ module SerialCommunicator(
   assign io_tx = uart_io_txd; // @[src/main/scala/SerialCommunicator.scala 22:11]
   assign uart_clock = clock;
   assign uart_reset = reset;
-  assign uart_io_channel_valid = write == 2'h1 ? _T_5 : _GEN_66; // @[src/main/scala/SerialCommunicator.scala 51:30]
-  assign uart_io_channel_bits = {{1'd0}, _GEN_72};
+  assign uart_io_channel_valid = write == 2'h1 ? _T_5 : _GEN_67; // @[src/main/scala/SerialCommunicator.scala 51:30]
+  assign uart_io_channel_bits = {{1'd0}, _GEN_73};
   always @(posedge clock) begin
     if (reset) begin // @[src/main/scala/SerialCommunicator.scala 38:24]
       write <= 2'h0; // @[src/main/scala/SerialCommunicator.scala 38:24]
     end else if (write == 2'h1) begin // @[src/main/scala/SerialCommunicator.scala 51:30]
-      if (index < 8'hf) begin // @[src/main/scala/SerialCommunicator.scala 52:48]
+      if (index < 8'h7) begin // @[src/main/scala/SerialCommunicator.scala 52:42]
         write <= _GEN_2;
       end else begin
         write <= 2'h2; // @[src/main/scala/SerialCommunicator.scala 61:19]
       end
     end else if (write == 2'h2) begin // @[src/main/scala/SerialCommunicator.scala 63:37]
-      if (_T_5) begin // @[src/main/scala/SerialCommunicator.scala 64:48]
+      if (index < 8'hf) begin // @[src/main/scala/SerialCommunicator.scala 64:48]
         write <= _GEN_2;
       end else begin
         write <= 2'h3; // @[src/main/scala/SerialCommunicator.scala 73:19]
       end
-    end else if (write == 2'h3) begin // @[src/main/scala/SerialCommunicator.scala 76:37]
-      write <= {{1'd0}, _GEN_58};
+    end else if (write == 2'h3) begin // @[src/main/scala/SerialCommunicator.scala 75:37]
+      write <= _GEN_60;
     end else begin
       write <= _GEN_2;
     end
@@ -512,19 +512,27 @@ module SerialCommunicator(
       refresh <= _GEN_3;
     end else if (write == 2'h2) begin // @[src/main/scala/SerialCommunicator.scala 63:37]
       refresh <= _GEN_3;
-    end else if (write == 2'h3) begin // @[src/main/scala/SerialCommunicator.scala 76:37]
-      refresh <= _GEN_59;
+    end else if (write == 2'h3) begin // @[src/main/scala/SerialCommunicator.scala 75:37]
+      refresh <= _GEN_61;
     end else begin
       refresh <= _GEN_3;
     end
     if (reset) begin // @[src/main/scala/SerialCommunicator.scala 40:24]
       index <= 8'h0; // @[src/main/scala/SerialCommunicator.scala 40:24]
     end else if (write == 2'h1) begin // @[src/main/scala/SerialCommunicator.scala 51:30]
-      index <= _GEN_14;
+      if (index < 8'h7) begin // @[src/main/scala/SerialCommunicator.scala 52:42]
+        index <= _GEN_11;
+      end else begin
+        index <= 8'h0; // @[src/main/scala/SerialCommunicator.scala 60:19]
+      end
     end else if (write == 2'h2) begin // @[src/main/scala/SerialCommunicator.scala 63:37]
-      index <= _GEN_14;
-    end else if (write == 2'h3) begin // @[src/main/scala/SerialCommunicator.scala 76:37]
-      index <= _GEN_60;
+      if (index < 8'hf) begin // @[src/main/scala/SerialCommunicator.scala 64:48]
+        index <= _GEN_11;
+      end else begin
+        index <= 8'h0; // @[src/main/scala/SerialCommunicator.scala 72:19]
+      end
+    end else if (write == 2'h3) begin // @[src/main/scala/SerialCommunicator.scala 75:37]
+      index <= _GEN_59;
     end else begin
       index <= _GEN_1;
     end
