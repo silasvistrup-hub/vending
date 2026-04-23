@@ -15,7 +15,6 @@ class VendingMachine(maxCount: Int) extends Module {
 
   val DisplayMultiplexer = Module(new DisplayMultiplexer(maxCount))
 
-
   val Value = RegInit(0.U(8.W)) // keeps track of value of coins not spent
   val Full2 = (Value>97.U) // these two make sure not more than 99 is inserted
   val Full5 = (Value>94.U)
@@ -30,6 +29,11 @@ class VendingMachine(maxCount: Int) extends Module {
   val coin2_change = io.coin2 && !coin2_previous
   val coin5_change = io.coin5 && !coin5_previous
   val buy_change   = io.buy && !buy_previous
+
+  val SerialComs = Module(new SerialCommunicator)
+  SerialComs.io.price := io.price
+  SerialComs.io.sum := Value
+  SerialComs.io.update := coin2_change || coin5_change || buy_change
 
   when(coin2_change && !Full2) {
     Value := Value + 2.U
