@@ -136,6 +136,10 @@ module VendingMachine(
   reg [31:0] _RAND_1;
   reg [31:0] _RAND_2;
   reg [31:0] _RAND_3;
+  reg [31:0] _RAND_4;
+  reg [31:0] _RAND_5;
+  reg [31:0] _RAND_6;
+  reg [31:0] _RAND_7;
 `endif // RANDOMIZE_REG_INIT
   wire  DisplayMultiplexer_clock; // @[\\src\\main\\scala\\VendingMachine.scala 16:34]
   wire  DisplayMultiplexer_reset; // @[\\src\\main\\scala\\VendingMachine.scala 16:34]
@@ -145,18 +149,29 @@ module VendingMachine(
   wire [3:0] DisplayMultiplexer_io_an; // @[\\src\\main\\scala\\VendingMachine.scala 16:34]
   reg [7:0] Value; // @[\\src\\main\\scala\\VendingMachine.scala 19:22]
   wire  Full2 = Value > 8'h61; // @[\\src\\main\\scala\\VendingMachine.scala 20:21]
-  wire  Full5 = Value > 8'h5f; // @[\\src\\main\\scala\\VendingMachine.scala 21:21]
-  wire [7:0] _GEN_3 = {{3'd0}, io_price}; // @[\\src\\main\\scala\\VendingMachine.scala 22:22]
-  wire  enough = Value >= _GEN_3; // @[\\src\\main\\scala\\VendingMachine.scala 22:22]
-  reg  coin2_previous; // @[\\src\\main\\scala\\VendingMachine.scala 27:31]
-  reg  coin5_previous; // @[\\src\\main\\scala\\VendingMachine.scala 28:31]
-  reg  buy_previous; // @[\\src\\main\\scala\\VendingMachine.scala 29:31]
-  wire  coin2_change = io_coin2 & ~coin2_previous; // @[\\src\\main\\scala\\VendingMachine.scala 31:31]
-  wire  coin5_change = io_coin5 & ~coin5_previous; // @[\\src\\main\\scala\\VendingMachine.scala 32:31]
-  wire  buy_change = io_buy & ~buy_previous; // @[\\src\\main\\scala\\VendingMachine.scala 33:29]
-  wire [7:0] _Value_T_1 = Value + 8'h2; // @[\\src\\main\\scala\\VendingMachine.scala 41:20]
-  wire [7:0] _Value_T_3 = Value + 8'h5; // @[\\src\\main\\scala\\VendingMachine.scala 43:20]
-  wire [7:0] _Value_T_5 = Value - _GEN_3; // @[\\src\\main\\scala\\VendingMachine.scala 45:20]
+  wire  Full5 = Value > 8'h5e; // @[\\src\\main\\scala\\VendingMachine.scala 21:21]
+  wire [7:0] _GEN_12 = {{3'd0}, io_price}; // @[\\src\\main\\scala\\VendingMachine.scala 22:22]
+  wire  enough = Value >= _GEN_12; // @[\\src\\main\\scala\\VendingMachine.scala 22:22]
+  reg [9:0] count_to_4; // @[\\src\\main\\scala\\VendingMachine.scala 23:27]
+  reg  coin2_previous; // @[\\src\\main\\scala\\VendingMachine.scala 26:31]
+  reg  coin5_previous; // @[\\src\\main\\scala\\VendingMachine.scala 27:31]
+  reg  buy_previous; // @[\\src\\main\\scala\\VendingMachine.scala 28:31]
+  wire  coin2_change = io_coin2 & ~coin2_previous; // @[\\src\\main\\scala\\VendingMachine.scala 30:31]
+  wire  coin5_change = io_coin5 & ~coin5_previous; // @[\\src\\main\\scala\\VendingMachine.scala 31:31]
+  wire  buy_change = io_buy & ~buy_previous; // @[\\src\\main\\scala\\VendingMachine.scala 32:29]
+  wire [7:0] _Value_T_1 = Value + 8'h2; // @[\\src\\main\\scala\\VendingMachine.scala 35:20]
+  wire [7:0] _Value_T_3 = Value + 8'h5; // @[\\src\\main\\scala\\VendingMachine.scala 37:20]
+  wire  _T_4 = buy_change & enough; // @[\\src\\main\\scala\\VendingMachine.scala 38:25]
+  wire [7:0] _Value_T_5 = Value - _GEN_12; // @[\\src\\main\\scala\\VendingMachine.scala 39:20]
+  reg  ringalarm; // @[\\src\\main\\scala\\VendingMachine.scala 42:26]
+  wire  _GEN_3 = buy_change & ~enough | ringalarm; // @[\\src\\main\\scala\\VendingMachine.scala 43:32 44:14 42:26]
+  reg  dispense; // @[\\src\\main\\scala\\VendingMachine.scala 47:25]
+  wire  _GEN_6 = count_to_4 == 10'h0 ? 1'h0 : dispense; // @[\\src\\main\\scala\\VendingMachine.scala 48:28 50:14 47:25]
+  wire  _GEN_7 = _T_4 | _GEN_6; // @[\\src\\main\\scala\\VendingMachine.scala 54:31 55:13]
+  reg [31:0] tick_tickCnt; // @[\\src\\main\\scala\\VendingMachine.scala 60:26]
+  wire  tick = tick_tickCnt == 32'h1869f; // @[\\src\\main\\scala\\VendingMachine.scala 63:18]
+  wire [31:0] _tick_tickCnt_T_1 = tick_tickCnt + 32'h1; // @[\\src\\main\\scala\\VendingMachine.scala 67:26]
+  wire [9:0] _count_to_4_T_1 = count_to_4 + 10'h1; // @[\\src\\main\\scala\\VendingMachine.scala 76:30]
   DisplayMultiplexer DisplayMultiplexer ( // @[\\src\\main\\scala\\VendingMachine.scala 16:34]
     .clock(DisplayMultiplexer_clock),
     .reset(DisplayMultiplexer_reset),
@@ -165,27 +180,55 @@ module VendingMachine(
     .io_seg(DisplayMultiplexer_io_seg),
     .io_an(DisplayMultiplexer_io_an)
   );
-  assign io_releaseCan = 1'h0; // @[\\src\\main\\scala\\VendingMachine.scala 51:23]
-  assign io_alarm = 1'h0; // @[\\src\\main\\scala\\VendingMachine.scala 50:18]
-  assign io_seg = DisplayMultiplexer_io_seg; // @[\\src\\main\\scala\\VendingMachine.scala 54:10]
-  assign io_an = DisplayMultiplexer_io_an; // @[\\src\\main\\scala\\VendingMachine.scala 55:9]
+  assign io_releaseCan = dispense; // @[\\src\\main\\scala\\VendingMachine.scala 82:17]
+  assign io_alarm = ringalarm; // @[\\src\\main\\scala\\VendingMachine.scala 81:12]
+  assign io_seg = DisplayMultiplexer_io_seg; // @[\\src\\main\\scala\\VendingMachine.scala 85:10]
+  assign io_an = DisplayMultiplexer_io_an; // @[\\src\\main\\scala\\VendingMachine.scala 86:9]
   assign DisplayMultiplexer_clock = clock;
   assign DisplayMultiplexer_reset = reset;
-  assign DisplayMultiplexer_io_sum = Value; // @[\\src\\main\\scala\\VendingMachine.scala 52:28]
-  assign DisplayMultiplexer_io_price = io_price; // @[\\src\\main\\scala\\VendingMachine.scala 53:31]
+  assign DisplayMultiplexer_io_sum = Value; // @[\\src\\main\\scala\\VendingMachine.scala 83:28]
+  assign DisplayMultiplexer_io_price = io_price; // @[\\src\\main\\scala\\VendingMachine.scala 84:31]
   always @(posedge clock) begin
     if (reset) begin // @[\\src\\main\\scala\\VendingMachine.scala 19:22]
       Value <= 8'h0; // @[\\src\\main\\scala\\VendingMachine.scala 19:22]
-    end else if (coin2_change & ~Full2) begin // @[\\src\\main\\scala\\VendingMachine.scala 40:32]
-      Value <= _Value_T_1; // @[\\src\\main\\scala\\VendingMachine.scala 41:11]
-    end else if (coin5_change & ~Full5) begin // @[\\src\\main\\scala\\VendingMachine.scala 42:38]
-      Value <= _Value_T_3; // @[\\src\\main\\scala\\VendingMachine.scala 43:11]
-    end else if (buy_change & enough) begin // @[\\src\\main\\scala\\VendingMachine.scala 44:36]
-      Value <= _Value_T_5; // @[\\src\\main\\scala\\VendingMachine.scala 45:11]
+    end else if (coin2_change & ~Full2) begin // @[\\src\\main\\scala\\VendingMachine.scala 34:32]
+      Value <= _Value_T_1; // @[\\src\\main\\scala\\VendingMachine.scala 35:11]
+    end else if (coin5_change & ~Full5) begin // @[\\src\\main\\scala\\VendingMachine.scala 36:38]
+      Value <= _Value_T_3; // @[\\src\\main\\scala\\VendingMachine.scala 37:11]
+    end else if (buy_change & enough) begin // @[\\src\\main\\scala\\VendingMachine.scala 38:36]
+      Value <= _Value_T_5; // @[\\src\\main\\scala\\VendingMachine.scala 39:11]
     end
-    coin2_previous <= io_coin2; // @[\\src\\main\\scala\\VendingMachine.scala 27:31]
-    coin5_previous <= io_coin5; // @[\\src\\main\\scala\\VendingMachine.scala 28:31]
-    buy_previous <= io_buy; // @[\\src\\main\\scala\\VendingMachine.scala 29:31]
+    if (reset) begin // @[\\src\\main\\scala\\VendingMachine.scala 23:27]
+      count_to_4 <= 10'h0; // @[\\src\\main\\scala\\VendingMachine.scala 23:27]
+    end else if (tick) begin // @[\\src\\main\\scala\\VendingMachine.scala 75:14]
+      count_to_4 <= _count_to_4_T_1; // @[\\src\\main\\scala\\VendingMachine.scala 76:16]
+    end else if (_T_4) begin // @[\\src\\main\\scala\\VendingMachine.scala 54:31]
+      count_to_4 <= 10'h1; // @[\\src\\main\\scala\\VendingMachine.scala 56:14]
+    end else if (buy_change & ~enough) begin // @[\\src\\main\\scala\\VendingMachine.scala 43:32]
+      count_to_4 <= 10'h1; // @[\\src\\main\\scala\\VendingMachine.scala 45:16]
+    end
+    coin2_previous <= io_coin2; // @[\\src\\main\\scala\\VendingMachine.scala 26:31]
+    coin5_previous <= io_coin5; // @[\\src\\main\\scala\\VendingMachine.scala 27:31]
+    buy_previous <= io_buy; // @[\\src\\main\\scala\\VendingMachine.scala 28:31]
+    if (reset) begin // @[\\src\\main\\scala\\VendingMachine.scala 42:26]
+      ringalarm <= 1'h0; // @[\\src\\main\\scala\\VendingMachine.scala 42:26]
+    end else if (count_to_4 == 10'h0) begin // @[\\src\\main\\scala\\VendingMachine.scala 48:28]
+      ringalarm <= 1'h0; // @[\\src\\main\\scala\\VendingMachine.scala 49:15]
+    end else begin
+      ringalarm <= _GEN_3;
+    end
+    if (reset) begin // @[\\src\\main\\scala\\VendingMachine.scala 47:25]
+      dispense <= 1'h0; // @[\\src\\main\\scala\\VendingMachine.scala 47:25]
+    end else begin
+      dispense <= _GEN_7;
+    end
+    if (reset) begin // @[\\src\\main\\scala\\VendingMachine.scala 60:26]
+      tick_tickCnt <= 32'h0; // @[\\src\\main\\scala\\VendingMachine.scala 60:26]
+    end else if (tick) begin // @[\\src\\main\\scala\\VendingMachine.scala 63:35]
+      tick_tickCnt <= 32'h0; // @[\\src\\main\\scala\\VendingMachine.scala 64:15]
+    end else begin
+      tick_tickCnt <= _tick_tickCnt_T_1; // @[\\src\\main\\scala\\VendingMachine.scala 67:15]
+    end
   end
 // Register and memory initialization
 `ifdef RANDOMIZE_GARBAGE_ASSIGN
@@ -226,11 +269,19 @@ initial begin
   _RAND_0 = {1{`RANDOM}};
   Value = _RAND_0[7:0];
   _RAND_1 = {1{`RANDOM}};
-  coin2_previous = _RAND_1[0:0];
+  count_to_4 = _RAND_1[9:0];
   _RAND_2 = {1{`RANDOM}};
-  coin5_previous = _RAND_2[0:0];
+  coin2_previous = _RAND_2[0:0];
   _RAND_3 = {1{`RANDOM}};
-  buy_previous = _RAND_3[0:0];
+  coin5_previous = _RAND_3[0:0];
+  _RAND_4 = {1{`RANDOM}};
+  buy_previous = _RAND_4[0:0];
+  _RAND_5 = {1{`RANDOM}};
+  ringalarm = _RAND_5[0:0];
+  _RAND_6 = {1{`RANDOM}};
+  dispense = _RAND_6[0:0];
+  _RAND_7 = {1{`RANDOM}};
+  tick_tickCnt = _RAND_7[31:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial

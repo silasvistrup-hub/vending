@@ -20,8 +20,7 @@ class VendingMachine(maxCount: Int) extends Module {
   val Full2 = (Value>97.U) // these two make sure not more than 99 is inserted
   val Full5 = (Value>94.U)
   val enough = (Value>=io.price)
-  //enough := (Value>=io.price)
-
+  val count_to_4 = RegInit(0.U(10.W))
 
 
   val coin2_previous = RegNext(io.coin2)
@@ -32,11 +31,6 @@ class VendingMachine(maxCount: Int) extends Module {
   val coin5_change = io.coin5 && !coin5_previous
   val buy_change   = io.buy && !buy_previous
 
-
-  val FSM = RegInit("b00000".U(5.W))
-
-
-
   when(coin2_change && !Full2) {
     Value := Value + 2.U
   }.elsewhen(coin5_change && !Full5) {
@@ -45,10 +39,47 @@ class VendingMachine(maxCount: Int) extends Module {
     Value := Value - io.price
   }
 
+  val ringalarm = RegInit(false.B)
+  when((buy_change && !enough)){
+    ringalarm:=true.B
+    count_to_4 := 1.U
+  }
+  val dispense = RegInit(false.B)
+  when(count_to_4 === 0.U) {
+    ringalarm := false.B
+    dispense := false.B
+  }
 
 
-  io.alarm := FSM(4)
-  io.releaseCan := FSM(3)
+  when((buy_change && enough)){
+    dispense:=true.B
+  count_to_4 :=1.U
+  }
+
+  def tickGenerator(max: Int): Bool = {
+    val tickCnt = RegInit(0.U(32.W))
+    val tick = WireDefault(false.B)
+
+    when(tickCnt === (max - 1).U) {
+      tickCnt := 0.U
+      tick := true.B
+    }.otherwise {
+      tickCnt := tickCnt + 1.U
+    }
+
+    tick
+  }
+
+  val tick = tickGenerator(maxCount)
+
+  when(tick) {
+    count_to_4 := count_to_4 + 1.U
+  }
+
+
+
+  io.alarm := ringalarm
+  io.releaseCan := dispense
   DisplayMultiplexer.io.sum:=Value
   DisplayMultiplexer.io.price := io.price
   io.seg := DisplayMultiplexer.io.seg
