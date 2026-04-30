@@ -34,7 +34,7 @@ class VendingMachine(maxCount: Int) extends Module {
   /* Define trigger */
   val coin2Trigger = io.coin2 && !prevCoin2
   val coin5Trigger = io.coin5 && !prevCoin5
-  val priceTrigger = io.price && !prevPrice
+  val priceTrigger = io.price =/= !prevPrice
   val buyTrigger   = io.buy && !prevBuy
 
   /* Init SerialCommunicator module */
@@ -44,16 +44,16 @@ class VendingMachine(maxCount: Int) extends Module {
   SerialComs.io.update := coin2Trigger || coin5Trigger || priceTrigger || buyTrigger
   io.tx := SerialComs.io.tx
 
-  when(coin2_change && !Full2) {
+  when(coin2Trigger && !full2) {
     inserted := inserted + 2.U
-  }.elsewhen(coin5_change && !Full5) {
+  }.elsewhen(coin5Trigger && !full5) {
     inserted := inserted + 5.U
-  }.elsewhen(buy_change && enough) {
+  }.elsewhen(buyTrigger && enough) {
     inserted := inserted - io.price
   }
 
   val ringAlarm = RegInit(false.B)
-  when((buy_change && !enough)){
+  when((buyTrigger && !enough)){
     ringAlarm:=true.B
     countTo4 := 1.U
   }
