@@ -16,11 +16,14 @@ class VendingMachine(maxCount: Int) extends Module {
 
   val DisplayMultiplexer = Module(new DisplayMultiplexer(maxCount))
 
+
   val Value = RegInit(0.U(8.W)) // keeps track of value of coins not spent
   val Full2 = (Value>97.U) // these two make sure not more than 99 is inserted
   val Full5 = (Value>94.U)
   val enough = (Value>=io.price)
   val count_to_4 = RegInit(0.U(10.W))
+  val im_full = WireDefault(false.B)
+
 
 
   val coin2_previous = RegNext(io.coin2)
@@ -83,11 +86,16 @@ class VendingMachine(maxCount: Int) extends Module {
   }
 
 
+  when(Full2 && coin2_change){im_full:=true.B}
+  when(Full5 && coin5_change){im_full:=true.B}
+
+
 
   io.alarm := ringalarm
   io.releaseCan := dispense
   DisplayMultiplexer.io.sum:=Value
   DisplayMultiplexer.io.price := io.price
+  DisplayMultiplexer.io.full := im_full
   io.seg := DisplayMultiplexer.io.seg
   io.an := DisplayMultiplexer.io.an
 }

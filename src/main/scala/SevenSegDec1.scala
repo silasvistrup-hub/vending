@@ -22,12 +22,13 @@ class SevenSegDec extends Module {
     is(7.U) {sevSeg := "b0000111".U} // 7
     is(8.U) {sevSeg := "b1111111".U} // 8
     is(9.U) {sevSeg := "b1101111".U} // 9
-    is(10.U) {sevSeg := "b1110111".U} // A
-    is(11.U) {sevSeg := "b1111100".U} // b
-    is(12.U) {sevSeg := "b0111001".U} // C
-    is(13.U) {sevSeg := "b1011110".U} // d
+    is(10.U) {sevSeg := "b1110001".U} // F
+    is(11.U) {sevSeg := "b0111110".U} // U
+    is(12.U) {sevSeg := "b0111000".U} // L
+    is(13.U) {sevSeg := "b0000000".U} // blank
     is(14.U) {sevSeg := "b1111001".U} // E
-    is(15.U) {sevSeg := "b1110001".U}}
+    is(15.U) {sevSeg := "b1110001".U}
+    }
 
   io.out := sevSeg
 }
