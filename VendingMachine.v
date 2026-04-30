@@ -4,10 +4,10 @@ module SevenSegDec(
 );
   wire [6:0] _GEN_0 = 4'hf == io_in ? 7'h71 : 7'h0; // @[src/main/scala/SevenSegDec1.scala 13:17 30:22 11:27]
   wire [6:0] _GEN_1 = 4'he == io_in ? 7'h79 : _GEN_0; // @[src/main/scala/SevenSegDec1.scala 13:17 29:22]
-  wire [6:0] _GEN_2 = 4'hd == io_in ? 7'h5e : _GEN_1; // @[src/main/scala/SevenSegDec1.scala 13:17 28:22]
-  wire [6:0] _GEN_3 = 4'hc == io_in ? 7'h39 : _GEN_2; // @[src/main/scala/SevenSegDec1.scala 13:17 27:22]
-  wire [6:0] _GEN_4 = 4'hb == io_in ? 7'h7c : _GEN_3; // @[src/main/scala/SevenSegDec1.scala 13:17 26:22]
-  wire [6:0] _GEN_5 = 4'ha == io_in ? 7'h77 : _GEN_4; // @[src/main/scala/SevenSegDec1.scala 13:17 25:22]
+  wire [6:0] _GEN_2 = 4'hd == io_in ? 7'h0 : _GEN_1; // @[src/main/scala/SevenSegDec1.scala 13:17 28:22]
+  wire [6:0] _GEN_3 = 4'hc == io_in ? 7'h38 : _GEN_2; // @[src/main/scala/SevenSegDec1.scala 13:17 27:22]
+  wire [6:0] _GEN_4 = 4'hb == io_in ? 7'h3e : _GEN_3; // @[src/main/scala/SevenSegDec1.scala 13:17 26:22]
+  wire [6:0] _GEN_5 = 4'ha == io_in ? 7'h71 : _GEN_4; // @[src/main/scala/SevenSegDec1.scala 13:17 25:22]
   wire [6:0] _GEN_6 = 4'h9 == io_in ? 7'h6f : _GEN_5; // @[src/main/scala/SevenSegDec1.scala 13:17 24:21]
   wire [6:0] _GEN_7 = 4'h8 == io_in ? 7'h7f : _GEN_6; // @[src/main/scala/SevenSegDec1.scala 13:17 23:21]
   wire [6:0] _GEN_8 = 4'h7 == io_in ? 7'h7 : _GEN_7; // @[src/main/scala/SevenSegDec1.scala 13:17 22:21]
@@ -25,50 +25,164 @@ module DisplayMultiplexer(
   input  [7:0] io_sum, // @[src/main/scala/DisplayMultiplexer1.scala 6:14]
   input  [4:0] io_price, // @[src/main/scala/DisplayMultiplexer1.scala 6:14]
   output [6:0] io_seg, // @[src/main/scala/DisplayMultiplexer1.scala 6:14]
-  output [3:0] io_an // @[src/main/scala/DisplayMultiplexer1.scala 6:14]
+  output [3:0] io_an, // @[src/main/scala/DisplayMultiplexer1.scala 6:14]
+  input        io_full // @[src/main/scala/DisplayMultiplexer1.scala 6:14]
 );
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_0;
   reg [31:0] _RAND_1;
+  reg [31:0] _RAND_2;
+  reg [31:0] _RAND_3;
+  reg [31:0] _RAND_4;
+  reg [31:0] _RAND_5;
+  reg [31:0] _RAND_6;
+  reg [31:0] _RAND_7;
+  reg [31:0] _RAND_8;
 `endif // RANDOMIZE_REG_INIT
-  wire [3:0] decoder_io_in; // @[src/main/scala/DisplayMultiplexer1.scala 12:23]
-  wire [6:0] decoder_io_out; // @[src/main/scala/DisplayMultiplexer1.scala 12:23]
-  reg [1:0] count_to_4; // @[src/main/scala/DisplayMultiplexer1.scala 13:27]
-  reg [31:0] tick_tickCnt; // @[src/main/scala/DisplayMultiplexer1.scala 17:26]
-  wire  tick = tick_tickCnt == 32'h1869f; // @[src/main/scala/DisplayMultiplexer1.scala 20:18]
-  wire [31:0] _tick_tickCnt_T_1 = tick_tickCnt + 32'h1; // @[src/main/scala/DisplayMultiplexer1.scala 24:26]
-  wire [1:0] _count_to_4_T_1 = count_to_4 + 2'h1; // @[src/main/scala/DisplayMultiplexer1.scala 33:30]
-  wire [7:0] _number2_T = io_sum / 4'ha; // @[src/main/scala/DisplayMultiplexer1.scala 43:21]
-  wire [7:0] _GEN_1 = io_sum % 8'ha; // @[src/main/scala/DisplayMultiplexer1.scala 44:21]
-  wire [3:0] number1 = _GEN_1[3:0]; // @[src/main/scala/DisplayMultiplexer1.scala 44:21]
-  wire [4:0] _number4_T = io_price / 4'ha; // @[src/main/scala/DisplayMultiplexer1.scala 45:23]
-  wire [4:0] _GEN_6 = io_price % 5'ha; // @[src/main/scala/DisplayMultiplexer1.scala 46:23]
-  wire [3:0] number3 = _GEN_6[3:0]; // @[src/main/scala/DisplayMultiplexer1.scala 46:23]
-  wire [3:0] number2 = _number2_T[3:0]; // @[src/main/scala/DisplayMultiplexer1.scala 38:28 43:11]
-  wire [3:0] _GEN_3 = 2'h3 == count_to_4 ? number2 : 4'h0; // @[src/main/scala/DisplayMultiplexer1.scala 48:17 50:22 55:32]
-  wire [3:0] _GEN_4 = 2'h2 == count_to_4 ? number1 : _GEN_3; // @[src/main/scala/DisplayMultiplexer1.scala 50:22 54:32]
-  wire [3:0] number4 = _number4_T[3:0]; // @[src/main/scala/DisplayMultiplexer1.scala 40:28 45:11]
-  wire [3:0] _GEN_5 = 2'h1 == count_to_4 ? number4 : _GEN_4; // @[src/main/scala/DisplayMultiplexer1.scala 50:22 53:32]
-  wire [3:0] _io_an_T = 4'h1 << count_to_4; // @[src/main/scala/DisplayMultiplexer1.scala 59:18]
-  SevenSegDec decoder ( // @[src/main/scala/DisplayMultiplexer1.scala 12:23]
+  wire [3:0] decoder_io_in; // @[src/main/scala/DisplayMultiplexer1.scala 13:23]
+  wire [6:0] decoder_io_out; // @[src/main/scala/DisplayMultiplexer1.scala 13:23]
+  reg [1:0] count_to_4; // @[src/main/scala/DisplayMultiplexer1.scala 14:27]
+  reg  full_sequence; // @[src/main/scala/DisplayMultiplexer1.scala 15:30]
+  reg [3:0] count_to_16; // @[src/main/scala/DisplayMultiplexer1.scala 16:28]
+  reg [31:0] tick_tickCnt; // @[src/main/scala/DisplayMultiplexer1.scala 20:26]
+  wire  tick = tick_tickCnt == 32'h1869f; // @[src/main/scala/DisplayMultiplexer1.scala 22:18]
+  wire [31:0] _tick_tickCnt_T_1 = tick_tickCnt + 32'h1; // @[src/main/scala/DisplayMultiplexer1.scala 26:26]
+  reg [31:0] tick_sec_tickCnt; // @[src/main/scala/DisplayMultiplexer1.scala 20:26]
+  wire  tick_sec = tick_sec_tickCnt == 32'h5f5e0ff; // @[src/main/scala/DisplayMultiplexer1.scala 22:18]
+  wire [31:0] _tick_sec_tickCnt_T_1 = tick_sec_tickCnt + 32'h1; // @[src/main/scala/DisplayMultiplexer1.scala 26:26]
+  wire [1:0] _count_to_4_T_1 = count_to_4 + 2'h1; // @[src/main/scala/DisplayMultiplexer1.scala 33:40]
+  wire [3:0] _count_to_16_T_1 = count_to_16 + 4'h1; // @[src/main/scala/DisplayMultiplexer1.scala 34:45]
+  wire  _GEN_6 = io_full | full_sequence; // @[src/main/scala/DisplayMultiplexer1.scala 35:17 36:19 15:30]
+  reg [3:0] number2_full; // @[src/main/scala/DisplayMultiplexer1.scala 44:29]
+  reg [3:0] number1_full; // @[src/main/scala/DisplayMultiplexer1.scala 45:29]
+  reg [3:0] number4_full; // @[src/main/scala/DisplayMultiplexer1.scala 46:29]
+  reg [3:0] number3_full; // @[src/main/scala/DisplayMultiplexer1.scala 47:29]
+  wire [3:0] _GEN_9 = 4'h9 == count_to_16 ? 4'hd : number2_full; // @[src/main/scala/DisplayMultiplexer1.scala 114:20 49:23 44:29]
+  wire [3:0] _GEN_10 = 4'h9 == count_to_16 ? 4'hd : number1_full; // @[src/main/scala/DisplayMultiplexer1.scala 115:20 49:23 45:29]
+  wire [3:0] _GEN_11 = 4'h9 == count_to_16 ? 4'hd : number4_full; // @[src/main/scala/DisplayMultiplexer1.scala 116:20 49:23 46:29]
+  wire [3:0] _GEN_12 = 4'h9 == count_to_16 ? 4'hd : number3_full; // @[src/main/scala/DisplayMultiplexer1.scala 117:20 49:23 47:29]
+  wire [3:0] _GEN_13 = 4'h8 == count_to_16 ? 4'hd : _GEN_9; // @[src/main/scala/DisplayMultiplexer1.scala 107:20 49:23]
+  wire [3:0] _GEN_14 = 4'h8 == count_to_16 ? 4'hd : _GEN_10; // @[src/main/scala/DisplayMultiplexer1.scala 108:20 49:23]
+  wire [3:0] _GEN_15 = 4'h8 == count_to_16 ? 4'hd : _GEN_11; // @[src/main/scala/DisplayMultiplexer1.scala 109:20 49:23]
+  wire [3:0] _GEN_16 = 4'h8 == count_to_16 ? 4'hd : _GEN_12; // @[src/main/scala/DisplayMultiplexer1.scala 110:20 49:23]
+  wire [3:0] _GEN_17 = 4'h7 == count_to_16 ? 4'hd : _GEN_13; // @[src/main/scala/DisplayMultiplexer1.scala 100:20 49:23]
+  wire [3:0] _GEN_18 = 4'h7 == count_to_16 ? 4'hd : _GEN_14; // @[src/main/scala/DisplayMultiplexer1.scala 101:20 49:23]
+  wire [3:0] _GEN_19 = 4'h7 == count_to_16 ? 4'hd : _GEN_15; // @[src/main/scala/DisplayMultiplexer1.scala 102:20 49:23]
+  wire [3:0] _GEN_20 = 4'h7 == count_to_16 ? 4'ha : _GEN_16; // @[src/main/scala/DisplayMultiplexer1.scala 103:20 49:23]
+  wire [3:0] _GEN_21 = 4'h6 == count_to_16 ? 4'hd : _GEN_17; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 93:20]
+  wire [3:0] _GEN_22 = 4'h6 == count_to_16 ? 4'hd : _GEN_18; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 94:20]
+  wire [3:0] _GEN_23 = 4'h6 == count_to_16 ? 4'ha : _GEN_19; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 95:20]
+  wire [3:0] _GEN_24 = 4'h6 == count_to_16 ? 4'hb : _GEN_20; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 96:20]
+  wire [3:0] _GEN_25 = 4'h5 == count_to_16 ? 4'hd : _GEN_21; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 86:20]
+  wire [3:0] _GEN_26 = 4'h5 == count_to_16 ? 4'ha : _GEN_22; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 87:20]
+  wire [3:0] _GEN_27 = 4'h5 == count_to_16 ? 4'hb : _GEN_23; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 88:20]
+  wire [3:0] _GEN_28 = 4'h5 == count_to_16 ? 4'hc : _GEN_24; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 89:20]
+  wire [3:0] _GEN_29 = 4'h4 == count_to_16 ? 4'ha : _GEN_25; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 79:20]
+  wire [3:0] _GEN_30 = 4'h4 == count_to_16 ? 4'hb : _GEN_26; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 80:20]
+  wire [3:0] _GEN_31 = 4'h4 == count_to_16 ? 4'hc : _GEN_27; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 81:20]
+  wire [3:0] _GEN_32 = 4'h4 == count_to_16 ? 4'hc : _GEN_28; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 82:20]
+  wire [3:0] _GEN_33 = 4'h3 == count_to_16 ? 4'hb : _GEN_29; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 72:20]
+  wire [3:0] _GEN_34 = 4'h3 == count_to_16 ? 4'hc : _GEN_30; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 73:20]
+  wire [3:0] _GEN_35 = 4'h3 == count_to_16 ? 4'hc : _GEN_31; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 74:20]
+  wire [3:0] _GEN_36 = 4'h3 == count_to_16 ? 4'hd : _GEN_32; // @[src/main/scala/DisplayMultiplexer1.scala 49:23 75:20]
+  wire [7:0] _number2_T = io_sum / 4'ha; // @[src/main/scala/DisplayMultiplexer1.scala 122:23]
+  wire [7:0] _GEN_1 = io_sum % 8'ha; // @[src/main/scala/DisplayMultiplexer1.scala 123:23]
+  wire [4:0] _number4_T = io_price / 4'ha; // @[src/main/scala/DisplayMultiplexer1.scala 124:25]
+  wire [4:0] _GEN_3 = io_price % 5'ha; // @[src/main/scala/DisplayMultiplexer1.scala 125:25]
+  wire [7:0] _GEN_49 = ~full_sequence ? _number2_T : {{4'd0}, number2_full}; // @[src/main/scala/DisplayMultiplexer1.scala 121:24 122:13 127:13]
+  wire [3:0] number1 = ~full_sequence ? _GEN_1[3:0] : number1_full; // @[src/main/scala/DisplayMultiplexer1.scala 121:24 123:13 128:13]
+  wire [4:0] _GEN_51 = ~full_sequence ? _number4_T : {{1'd0}, number4_full}; // @[src/main/scala/DisplayMultiplexer1.scala 121:24 124:13 129:13]
+  wire [3:0] number3 = ~full_sequence ? _GEN_3[3:0] : number3_full; // @[src/main/scala/DisplayMultiplexer1.scala 121:24 125:13 130:13]
+  wire [3:0] number2 = _GEN_49[3:0]; // @[src/main/scala/DisplayMultiplexer1.scala 41:28]
+  wire [3:0] _GEN_53 = 2'h3 == count_to_4 ? number2 : 4'h0; // @[src/main/scala/DisplayMultiplexer1.scala 133:17 135:22 140:32]
+  wire [3:0] _GEN_54 = 2'h2 == count_to_4 ? number1 : _GEN_53; // @[src/main/scala/DisplayMultiplexer1.scala 135:22 139:32]
+  wire [3:0] number4 = _GEN_51[3:0]; // @[src/main/scala/DisplayMultiplexer1.scala 43:28]
+  wire [3:0] _GEN_55 = 2'h1 == count_to_4 ? number4 : _GEN_54; // @[src/main/scala/DisplayMultiplexer1.scala 135:22 138:32]
+  wire [3:0] _io_an_T = 4'h1 << count_to_4; // @[src/main/scala/DisplayMultiplexer1.scala 142:18]
+  SevenSegDec decoder ( // @[src/main/scala/DisplayMultiplexer1.scala 13:23]
     .io_in(decoder_io_in),
     .io_out(decoder_io_out)
   );
-  assign io_seg = ~decoder_io_out; // @[src/main/scala/DisplayMultiplexer1.scala 60:13]
-  assign io_an = ~_io_an_T; // @[src/main/scala/DisplayMultiplexer1.scala 59:12]
-  assign decoder_io_in = 2'h0 == count_to_4 ? number3 : _GEN_5; // @[src/main/scala/DisplayMultiplexer1.scala 50:22 52:32]
+  assign io_seg = ~decoder_io_out; // @[src/main/scala/DisplayMultiplexer1.scala 143:13]
+  assign io_an = ~_io_an_T; // @[src/main/scala/DisplayMultiplexer1.scala 142:12]
+  assign decoder_io_in = 2'h0 == count_to_4 ? number3 : _GEN_55; // @[src/main/scala/DisplayMultiplexer1.scala 135:22 137:32]
   always @(posedge clock) begin
-    if (reset) begin // @[src/main/scala/DisplayMultiplexer1.scala 13:27]
-      count_to_4 <= 2'h0; // @[src/main/scala/DisplayMultiplexer1.scala 13:27]
-    end else if (tick) begin // @[src/main/scala/DisplayMultiplexer1.scala 32:14]
-      count_to_4 <= _count_to_4_T_1; // @[src/main/scala/DisplayMultiplexer1.scala 33:16]
+    if (reset) begin // @[src/main/scala/DisplayMultiplexer1.scala 14:27]
+      count_to_4 <= 2'h0; // @[src/main/scala/DisplayMultiplexer1.scala 14:27]
+    end else if (tick) begin // @[src/main/scala/DisplayMultiplexer1.scala 33:14]
+      count_to_4 <= _count_to_4_T_1; // @[src/main/scala/DisplayMultiplexer1.scala 33:26]
     end
-    if (reset) begin // @[src/main/scala/DisplayMultiplexer1.scala 17:26]
-      tick_tickCnt <= 32'h0; // @[src/main/scala/DisplayMultiplexer1.scala 17:26]
-    end else if (tick) begin // @[src/main/scala/DisplayMultiplexer1.scala 20:35]
-      tick_tickCnt <= 32'h0; // @[src/main/scala/DisplayMultiplexer1.scala 21:15]
+    if (reset) begin // @[src/main/scala/DisplayMultiplexer1.scala 15:30]
+      full_sequence <= 1'h0; // @[src/main/scala/DisplayMultiplexer1.scala 15:30]
+    end else if (count_to_16 == 4'ha) begin // @[src/main/scala/DisplayMultiplexer1.scala 38:27]
+      full_sequence <= 1'h0; // @[src/main/scala/DisplayMultiplexer1.scala 38:41]
     end else begin
-      tick_tickCnt <= _tick_tickCnt_T_1; // @[src/main/scala/DisplayMultiplexer1.scala 24:15]
+      full_sequence <= _GEN_6;
+    end
+    if (reset) begin // @[src/main/scala/DisplayMultiplexer1.scala 16:28]
+      count_to_16 <= 4'h0; // @[src/main/scala/DisplayMultiplexer1.scala 16:28]
+    end else if (io_full) begin // @[src/main/scala/DisplayMultiplexer1.scala 35:17]
+      count_to_16 <= 4'h0; // @[src/main/scala/DisplayMultiplexer1.scala 37:16]
+    end else if (tick_sec) begin // @[src/main/scala/DisplayMultiplexer1.scala 34:17]
+      count_to_16 <= _count_to_16_T_1; // @[src/main/scala/DisplayMultiplexer1.scala 34:30]
+    end
+    if (reset) begin // @[src/main/scala/DisplayMultiplexer1.scala 20:26]
+      tick_tickCnt <= 32'h0; // @[src/main/scala/DisplayMultiplexer1.scala 20:26]
+    end else if (tick) begin // @[src/main/scala/DisplayMultiplexer1.scala 22:35]
+      tick_tickCnt <= 32'h0; // @[src/main/scala/DisplayMultiplexer1.scala 23:15]
+    end else begin
+      tick_tickCnt <= _tick_tickCnt_T_1; // @[src/main/scala/DisplayMultiplexer1.scala 26:15]
+    end
+    if (reset) begin // @[src/main/scala/DisplayMultiplexer1.scala 20:26]
+      tick_sec_tickCnt <= 32'h0; // @[src/main/scala/DisplayMultiplexer1.scala 20:26]
+    end else if (tick_sec) begin // @[src/main/scala/DisplayMultiplexer1.scala 22:35]
+      tick_sec_tickCnt <= 32'h0; // @[src/main/scala/DisplayMultiplexer1.scala 23:15]
+    end else begin
+      tick_sec_tickCnt <= _tick_sec_tickCnt_T_1; // @[src/main/scala/DisplayMultiplexer1.scala 26:15]
+    end
+    if (reset) begin // @[src/main/scala/DisplayMultiplexer1.scala 44:29]
+      number2_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 44:29]
+    end else if (4'h0 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number2_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 51:20]
+    end else if (4'h1 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number2_full <= 4'hc; // @[src/main/scala/DisplayMultiplexer1.scala 58:20]
+    end else if (4'h2 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number2_full <= 4'hc; // @[src/main/scala/DisplayMultiplexer1.scala 65:20]
+    end else begin
+      number2_full <= _GEN_33;
+    end
+    if (reset) begin // @[src/main/scala/DisplayMultiplexer1.scala 45:29]
+      number1_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 45:29]
+    end else if (4'h0 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number1_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 52:20]
+    end else if (4'h1 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number1_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 59:20]
+    end else if (4'h2 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number1_full <= 4'hc; // @[src/main/scala/DisplayMultiplexer1.scala 66:20]
+    end else begin
+      number1_full <= _GEN_34;
+    end
+    if (reset) begin // @[src/main/scala/DisplayMultiplexer1.scala 46:29]
+      number4_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 46:29]
+    end else if (4'h0 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number4_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 53:20]
+    end else if (4'h1 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number4_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 60:20]
+    end else if (4'h2 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number4_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 67:20]
+    end else begin
+      number4_full <= _GEN_35;
+    end
+    if (reset) begin // @[src/main/scala/DisplayMultiplexer1.scala 47:29]
+      number3_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 47:29]
+    end else if (4'h0 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number3_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 54:20]
+    end else if (4'h1 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number3_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 61:20]
+    end else if (4'h2 == count_to_16) begin // @[src/main/scala/DisplayMultiplexer1.scala 49:23]
+      number3_full <= 4'hd; // @[src/main/scala/DisplayMultiplexer1.scala 68:20]
+    end else begin
+      number3_full <= _GEN_36;
     end
   end
 // Register and memory initialization
@@ -110,7 +224,21 @@ initial begin
   _RAND_0 = {1{`RANDOM}};
   count_to_4 = _RAND_0[1:0];
   _RAND_1 = {1{`RANDOM}};
-  tick_tickCnt = _RAND_1[31:0];
+  full_sequence = _RAND_1[0:0];
+  _RAND_2 = {1{`RANDOM}};
+  count_to_16 = _RAND_2[3:0];
+  _RAND_3 = {1{`RANDOM}};
+  tick_tickCnt = _RAND_3[31:0];
+  _RAND_4 = {1{`RANDOM}};
+  tick_sec_tickCnt = _RAND_4[31:0];
+  _RAND_5 = {1{`RANDOM}};
+  number2_full = _RAND_5[3:0];
+  _RAND_6 = {1{`RANDOM}};
+  number1_full = _RAND_6[3:0];
+  _RAND_7 = {1{`RANDOM}};
+  number4_full = _RAND_7[3:0];
+  _RAND_8 = {1{`RANDOM}};
+  number3_full = _RAND_8[3:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial
@@ -616,46 +744,49 @@ module VendingMachine(
   wire [4:0] DisplayMultiplexer_io_price; // @[src/main/scala/VendingMachine.scala 17:34]
   wire [6:0] DisplayMultiplexer_io_seg; // @[src/main/scala/VendingMachine.scala 17:34]
   wire [3:0] DisplayMultiplexer_io_an; // @[src/main/scala/VendingMachine.scala 17:34]
-  wire  SerialComs_clock; // @[src/main/scala/VendingMachine.scala 34:26]
-  wire  SerialComs_reset; // @[src/main/scala/VendingMachine.scala 34:26]
-  wire [4:0] SerialComs_io_price; // @[src/main/scala/VendingMachine.scala 34:26]
-  wire [7:0] SerialComs_io_sum; // @[src/main/scala/VendingMachine.scala 34:26]
-  wire  SerialComs_io_update; // @[src/main/scala/VendingMachine.scala 34:26]
-  wire  SerialComs_io_tx; // @[src/main/scala/VendingMachine.scala 34:26]
-  reg [7:0] Value; // @[src/main/scala/VendingMachine.scala 19:22]
-  wire  Full2 = Value > 8'h61; // @[src/main/scala/VendingMachine.scala 20:21]
-  wire  Full5 = Value > 8'h5e; // @[src/main/scala/VendingMachine.scala 21:21]
-  wire [7:0] _GEN_12 = {{3'd0}, io_price}; // @[src/main/scala/VendingMachine.scala 22:22]
-  wire  enough = Value >= _GEN_12; // @[src/main/scala/VendingMachine.scala 22:22]
-  reg [9:0] count_to_4; // @[src/main/scala/VendingMachine.scala 23:27]
-  reg  coin2_previous; // @[src/main/scala/VendingMachine.scala 26:31]
-  reg  coin5_previous; // @[src/main/scala/VendingMachine.scala 27:31]
-  reg  buy_previous; // @[src/main/scala/VendingMachine.scala 28:31]
-  wire  coin2_change = io_coin2 & ~coin2_previous; // @[src/main/scala/VendingMachine.scala 30:31]
-  wire  coin5_change = io_coin5 & ~coin5_previous; // @[src/main/scala/VendingMachine.scala 31:31]
-  wire  buy_change = io_buy & ~buy_previous; // @[src/main/scala/VendingMachine.scala 32:29]
-  wire [7:0] _Value_T_1 = Value + 8'h2; // @[src/main/scala/VendingMachine.scala 41:20]
-  wire [7:0] _Value_T_3 = Value + 8'h5; // @[src/main/scala/VendingMachine.scala 43:20]
-  wire  _T_4 = buy_change & enough; // @[src/main/scala/VendingMachine.scala 44:25]
-  wire [7:0] _Value_T_5 = Value - _GEN_12; // @[src/main/scala/VendingMachine.scala 45:20]
-  reg  ringalarm; // @[src/main/scala/VendingMachine.scala 48:26]
-  wire  _GEN_3 = buy_change & ~enough | ringalarm; // @[src/main/scala/VendingMachine.scala 49:32 50:14 48:26]
-  reg  dispense; // @[src/main/scala/VendingMachine.scala 53:25]
-  wire  _GEN_6 = count_to_4 == 10'h0 ? 1'h0 : dispense; // @[src/main/scala/VendingMachine.scala 54:28 56:14 53:25]
-  wire  _GEN_7 = _T_4 | _GEN_6; // @[src/main/scala/VendingMachine.scala 60:31 61:13]
-  reg [31:0] tick_tickCnt; // @[src/main/scala/VendingMachine.scala 66:26]
-  wire  tick = tick_tickCnt == 32'h1869f; // @[src/main/scala/VendingMachine.scala 69:18]
-  wire [31:0] _tick_tickCnt_T_1 = tick_tickCnt + 32'h1; // @[src/main/scala/VendingMachine.scala 73:26]
-  wire [9:0] _count_to_4_T_1 = count_to_4 + 10'h1; // @[src/main/scala/VendingMachine.scala 82:30]
+  wire  DisplayMultiplexer_io_full; // @[src/main/scala/VendingMachine.scala 17:34]
+  wire  SerialComs_clock; // @[src/main/scala/VendingMachine.scala 37:26]
+  wire  SerialComs_reset; // @[src/main/scala/VendingMachine.scala 37:26]
+  wire [4:0] SerialComs_io_price; // @[src/main/scala/VendingMachine.scala 37:26]
+  wire [7:0] SerialComs_io_sum; // @[src/main/scala/VendingMachine.scala 37:26]
+  wire  SerialComs_io_update; // @[src/main/scala/VendingMachine.scala 37:26]
+  wire  SerialComs_io_tx; // @[src/main/scala/VendingMachine.scala 37:26]
+  reg [7:0] Value; // @[src/main/scala/VendingMachine.scala 20:22]
+  wire  Full2 = Value > 8'h61; // @[src/main/scala/VendingMachine.scala 21:21]
+  wire  Full5 = Value > 8'h5e; // @[src/main/scala/VendingMachine.scala 22:21]
+  wire [7:0] _GEN_14 = {{3'd0}, io_price}; // @[src/main/scala/VendingMachine.scala 23:22]
+  wire  enough = Value >= _GEN_14; // @[src/main/scala/VendingMachine.scala 23:22]
+  reg [9:0] count_to_4; // @[src/main/scala/VendingMachine.scala 24:27]
+  reg  coin2_previous; // @[src/main/scala/VendingMachine.scala 29:31]
+  reg  coin5_previous; // @[src/main/scala/VendingMachine.scala 30:31]
+  reg  buy_previous; // @[src/main/scala/VendingMachine.scala 31:31]
+  wire  coin2_change = io_coin2 & ~coin2_previous; // @[src/main/scala/VendingMachine.scala 33:31]
+  wire  coin5_change = io_coin5 & ~coin5_previous; // @[src/main/scala/VendingMachine.scala 34:31]
+  wire  buy_change = io_buy & ~buy_previous; // @[src/main/scala/VendingMachine.scala 35:29]
+  wire [7:0] _Value_T_1 = Value + 8'h2; // @[src/main/scala/VendingMachine.scala 44:20]
+  wire [7:0] _Value_T_3 = Value + 8'h5; // @[src/main/scala/VendingMachine.scala 46:20]
+  wire  _T_4 = buy_change & enough; // @[src/main/scala/VendingMachine.scala 47:25]
+  wire [7:0] _Value_T_5 = Value - _GEN_14; // @[src/main/scala/VendingMachine.scala 48:20]
+  reg  ringalarm; // @[src/main/scala/VendingMachine.scala 51:26]
+  wire  _GEN_3 = buy_change & ~enough | ringalarm; // @[src/main/scala/VendingMachine.scala 52:32 53:14 51:26]
+  reg  dispense; // @[src/main/scala/VendingMachine.scala 56:25]
+  wire  _GEN_6 = count_to_4 == 10'h0 ? 1'h0 : dispense; // @[src/main/scala/VendingMachine.scala 57:28 59:14 56:25]
+  wire  _GEN_7 = _T_4 | _GEN_6; // @[src/main/scala/VendingMachine.scala 63:31 64:13]
+  reg [31:0] tick_tickCnt; // @[src/main/scala/VendingMachine.scala 69:26]
+  wire  tick = tick_tickCnt == 32'h1869f; // @[src/main/scala/VendingMachine.scala 72:18]
+  wire [31:0] _tick_tickCnt_T_1 = tick_tickCnt + 32'h1; // @[src/main/scala/VendingMachine.scala 76:26]
+  wire [9:0] _count_to_4_T_1 = count_to_4 + 10'h1; // @[src/main/scala/VendingMachine.scala 85:30]
+  wire  _T_9 = Full2 & coin2_change; // @[src/main/scala/VendingMachine.scala 89:14]
   DisplayMultiplexer DisplayMultiplexer ( // @[src/main/scala/VendingMachine.scala 17:34]
     .clock(DisplayMultiplexer_clock),
     .reset(DisplayMultiplexer_reset),
     .io_sum(DisplayMultiplexer_io_sum),
     .io_price(DisplayMultiplexer_io_price),
     .io_seg(DisplayMultiplexer_io_seg),
-    .io_an(DisplayMultiplexer_io_an)
+    .io_an(DisplayMultiplexer_io_an),
+    .io_full(DisplayMultiplexer_io_full)
   );
-  SerialCommunicator SerialComs ( // @[src/main/scala/VendingMachine.scala 34:26]
+  SerialCommunicator SerialComs ( // @[src/main/scala/VendingMachine.scala 37:26]
     .clock(SerialComs_clock),
     .reset(SerialComs_reset),
     .io_price(SerialComs_io_price),
@@ -663,60 +794,61 @@ module VendingMachine(
     .io_update(SerialComs_io_update),
     .io_tx(SerialComs_io_tx)
   );
-  assign io_releaseCan = dispense; // @[src/main/scala/VendingMachine.scala 88:17]
-  assign io_alarm = ringalarm; // @[src/main/scala/VendingMachine.scala 87:12]
-  assign io_seg = DisplayMultiplexer_io_seg; // @[src/main/scala/VendingMachine.scala 91:10]
-  assign io_an = DisplayMultiplexer_io_an; // @[src/main/scala/VendingMachine.scala 92:9]
-  assign io_tx = SerialComs_io_tx; // @[src/main/scala/VendingMachine.scala 38:9]
+  assign io_releaseCan = dispense; // @[src/main/scala/VendingMachine.scala 95:17]
+  assign io_alarm = ringalarm; // @[src/main/scala/VendingMachine.scala 94:12]
+  assign io_seg = DisplayMultiplexer_io_seg; // @[src/main/scala/VendingMachine.scala 99:10]
+  assign io_an = DisplayMultiplexer_io_an; // @[src/main/scala/VendingMachine.scala 100:9]
+  assign io_tx = SerialComs_io_tx; // @[src/main/scala/VendingMachine.scala 41:9]
   assign DisplayMultiplexer_clock = clock;
   assign DisplayMultiplexer_reset = reset;
-  assign DisplayMultiplexer_io_sum = Value; // @[src/main/scala/VendingMachine.scala 89:28]
-  assign DisplayMultiplexer_io_price = io_price; // @[src/main/scala/VendingMachine.scala 90:31]
+  assign DisplayMultiplexer_io_sum = Value; // @[src/main/scala/VendingMachine.scala 96:28]
+  assign DisplayMultiplexer_io_price = io_price; // @[src/main/scala/VendingMachine.scala 97:31]
+  assign DisplayMultiplexer_io_full = Full5 & coin5_change | _T_9; // @[src/main/scala/VendingMachine.scala 90:{30,38}]
   assign SerialComs_clock = clock;
   assign SerialComs_reset = reset;
-  assign SerialComs_io_price = io_price; // @[src/main/scala/VendingMachine.scala 35:23]
-  assign SerialComs_io_sum = Value; // @[src/main/scala/VendingMachine.scala 36:21]
-  assign SerialComs_io_update = coin2_change | coin5_change | buy_change; // @[src/main/scala/VendingMachine.scala 37:56]
+  assign SerialComs_io_price = io_price; // @[src/main/scala/VendingMachine.scala 38:23]
+  assign SerialComs_io_sum = Value; // @[src/main/scala/VendingMachine.scala 39:21]
+  assign SerialComs_io_update = coin2_change | coin5_change | buy_change; // @[src/main/scala/VendingMachine.scala 40:56]
   always @(posedge clock) begin
-    if (reset) begin // @[src/main/scala/VendingMachine.scala 19:22]
-      Value <= 8'h0; // @[src/main/scala/VendingMachine.scala 19:22]
-    end else if (coin2_change & ~Full2) begin // @[src/main/scala/VendingMachine.scala 40:32]
-      Value <= _Value_T_1; // @[src/main/scala/VendingMachine.scala 41:11]
-    end else if (coin5_change & ~Full5) begin // @[src/main/scala/VendingMachine.scala 42:38]
-      Value <= _Value_T_3; // @[src/main/scala/VendingMachine.scala 43:11]
-    end else if (buy_change & enough) begin // @[src/main/scala/VendingMachine.scala 44:36]
-      Value <= _Value_T_5; // @[src/main/scala/VendingMachine.scala 45:11]
+    if (reset) begin // @[src/main/scala/VendingMachine.scala 20:22]
+      Value <= 8'h0; // @[src/main/scala/VendingMachine.scala 20:22]
+    end else if (coin2_change & ~Full2) begin // @[src/main/scala/VendingMachine.scala 43:32]
+      Value <= _Value_T_1; // @[src/main/scala/VendingMachine.scala 44:11]
+    end else if (coin5_change & ~Full5) begin // @[src/main/scala/VendingMachine.scala 45:38]
+      Value <= _Value_T_3; // @[src/main/scala/VendingMachine.scala 46:11]
+    end else if (buy_change & enough) begin // @[src/main/scala/VendingMachine.scala 47:36]
+      Value <= _Value_T_5; // @[src/main/scala/VendingMachine.scala 48:11]
     end
-    if (reset) begin // @[src/main/scala/VendingMachine.scala 23:27]
-      count_to_4 <= 10'h0; // @[src/main/scala/VendingMachine.scala 23:27]
-    end else if (tick) begin // @[src/main/scala/VendingMachine.scala 81:14]
-      count_to_4 <= _count_to_4_T_1; // @[src/main/scala/VendingMachine.scala 82:16]
-    end else if (_T_4) begin // @[src/main/scala/VendingMachine.scala 60:31]
-      count_to_4 <= 10'h1; // @[src/main/scala/VendingMachine.scala 62:14]
-    end else if (buy_change & ~enough) begin // @[src/main/scala/VendingMachine.scala 49:32]
-      count_to_4 <= 10'h1; // @[src/main/scala/VendingMachine.scala 51:16]
+    if (reset) begin // @[src/main/scala/VendingMachine.scala 24:27]
+      count_to_4 <= 10'h0; // @[src/main/scala/VendingMachine.scala 24:27]
+    end else if (tick) begin // @[src/main/scala/VendingMachine.scala 84:14]
+      count_to_4 <= _count_to_4_T_1; // @[src/main/scala/VendingMachine.scala 85:16]
+    end else if (_T_4) begin // @[src/main/scala/VendingMachine.scala 63:31]
+      count_to_4 <= 10'h1; // @[src/main/scala/VendingMachine.scala 65:14]
+    end else if (buy_change & ~enough) begin // @[src/main/scala/VendingMachine.scala 52:32]
+      count_to_4 <= 10'h1; // @[src/main/scala/VendingMachine.scala 54:16]
     end
-    coin2_previous <= io_coin2; // @[src/main/scala/VendingMachine.scala 26:31]
-    coin5_previous <= io_coin5; // @[src/main/scala/VendingMachine.scala 27:31]
-    buy_previous <= io_buy; // @[src/main/scala/VendingMachine.scala 28:31]
-    if (reset) begin // @[src/main/scala/VendingMachine.scala 48:26]
-      ringalarm <= 1'h0; // @[src/main/scala/VendingMachine.scala 48:26]
-    end else if (count_to_4 == 10'h0) begin // @[src/main/scala/VendingMachine.scala 54:28]
-      ringalarm <= 1'h0; // @[src/main/scala/VendingMachine.scala 55:15]
+    coin2_previous <= io_coin2; // @[src/main/scala/VendingMachine.scala 29:31]
+    coin5_previous <= io_coin5; // @[src/main/scala/VendingMachine.scala 30:31]
+    buy_previous <= io_buy; // @[src/main/scala/VendingMachine.scala 31:31]
+    if (reset) begin // @[src/main/scala/VendingMachine.scala 51:26]
+      ringalarm <= 1'h0; // @[src/main/scala/VendingMachine.scala 51:26]
+    end else if (count_to_4 == 10'h0) begin // @[src/main/scala/VendingMachine.scala 57:28]
+      ringalarm <= 1'h0; // @[src/main/scala/VendingMachine.scala 58:15]
     end else begin
       ringalarm <= _GEN_3;
     end
-    if (reset) begin // @[src/main/scala/VendingMachine.scala 53:25]
-      dispense <= 1'h0; // @[src/main/scala/VendingMachine.scala 53:25]
+    if (reset) begin // @[src/main/scala/VendingMachine.scala 56:25]
+      dispense <= 1'h0; // @[src/main/scala/VendingMachine.scala 56:25]
     end else begin
       dispense <= _GEN_7;
     end
-    if (reset) begin // @[src/main/scala/VendingMachine.scala 66:26]
-      tick_tickCnt <= 32'h0; // @[src/main/scala/VendingMachine.scala 66:26]
-    end else if (tick) begin // @[src/main/scala/VendingMachine.scala 69:35]
-      tick_tickCnt <= 32'h0; // @[src/main/scala/VendingMachine.scala 70:15]
+    if (reset) begin // @[src/main/scala/VendingMachine.scala 69:26]
+      tick_tickCnt <= 32'h0; // @[src/main/scala/VendingMachine.scala 69:26]
+    end else if (tick) begin // @[src/main/scala/VendingMachine.scala 72:35]
+      tick_tickCnt <= 32'h0; // @[src/main/scala/VendingMachine.scala 73:15]
     end else begin
-      tick_tickCnt <= _tick_tickCnt_T_1; // @[src/main/scala/VendingMachine.scala 73:15]
+      tick_tickCnt <= _tick_tickCnt_T_1; // @[src/main/scala/VendingMachine.scala 76:15]
     end
   end
 // Register and memory initialization
