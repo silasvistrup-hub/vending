@@ -1,0 +1,34 @@
+[
+  {
+    "class":"firrtl.EmitCircuitAnnotation",
+    "emitter":"firrtl.VerilogEmitter"
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"FSM$State",
+    "definition":{
+      "coin2State":1,
+      "coin5State":2,
+      "releaseState":4,
+      "alarmState":3,
+      "idleState":0,
+      "fullState":5
+    }
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
+    "target":"FSM.FSM.stateReg",
+    "enumTypeName":"FSM$State"
+  },
+  {
+    "class":"firrtl.transforms.BlackBoxTargetDirAnno",
+    "targetDir":"."
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~FSM|FSM>io_seg",
+    "sources":[
+      "~FSM|FSM>io_price"
+    ]
+  }
+]
