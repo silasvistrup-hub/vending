@@ -5,7 +5,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 class VendingTester extends AnyFlatSpec with ChiselScalatestTester {
   "Vending machine test" should "pass" in {
-    test(new VendingMachine(20)).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
+    test(new FSM(20)).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
       println("We are generting a VCD file with the test of the vending machine")
       dut.io.price.poke(7.U)
       dut.clock.step(3)

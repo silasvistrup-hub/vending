@@ -15,13 +15,19 @@ class SerialCommunicator(maxCount: Int) extends Module {
         val tx = Output(Bool())
     })
 
+    /* Init UART */
+    val uart = Module(new BufferedTx(maxCount, 115200))
+    io.tx := uart.io.txd
+    uart.io.channel.valid := false.B
+    uart.io.channel.bits  := 0.U
+
     def uintToAscii(value: UInt): Seq[UInt] = {
         val tens     = (value / 10.U) % 10.U
         val ones     = value % 10.U
         Seq(tens + 48.U(8.W), ones + 48.U(8.W))
     }
 
-    def sendMsg(msg: Vec[UInt], nextState: WriteState.Type) {
+    def sendMsg(msg: Vec[UInt], nextState: WriteState.Type): Unit = {
         when (index < msg.length.U) {
             uart.io.channel.valid := true.B
             uart.io.channel.bits  := msg(index)
@@ -34,11 +40,6 @@ class SerialCommunicator(maxCount: Int) extends Module {
         }
     }
 
-    /* Init UART */
-    val uart = Module(new BufferedTx(maxCount, 115200))
-    io.tx := uart.io.txd
-    uart.io.channel.valid := false.B
-    uart.io.channel.bits  := 0.U
 
     /* Init messages */
     val formattedPrice = VecInit(
@@ -58,14 +59,17 @@ class SerialCommunicator(maxCount: Int) extends Module {
     val refresh = RegInit(false.B) // Makes the screen refresh upon completion of last write
     val index = RegInit(0.U(5.W)) // The longest message is 18 bytes wide
 
-    when(io.update && writeState =/= sIdle) {
-        refresh := true.B
+    when(io.update) {
+        when(io.update && writeState === sIdle) {
+            writeState := sClear
+        } .otherwise {
+            refresh := true.B
+        }
     }
 
     switch(writeState) {
         is (sIdle) {
             index := 0.U
-            refresh := false.B
 
             when (io.update) {
                 writeState := sClear
@@ -73,6 +77,7 @@ class SerialCommunicator(maxCount: Int) extends Module {
         }
         is (sClear) {
             sendMsg(clearCmd, sPrice)
+            refresh := false.B
         }
         is (sPrice) {
             sendMsg(formattedPrice, sSum)
@@ -80,7 +85,6 @@ class SerialCommunicator(maxCount: Int) extends Module {
         is (sSum) {
             val nextState = Mux(refresh, sClear, sIdle)
             sendMsg(formattedSum, nextState)
-            refresh := false.B
         }
     }
 }
