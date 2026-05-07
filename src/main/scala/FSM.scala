@@ -110,5 +110,5 @@ class FSM(maxCount: Int) extends Module {
 
 }
 object FSM extends App {
-  emitVerilog(new FSM(100000))
+  emitVerilog(new FSM(100000000))
 }
