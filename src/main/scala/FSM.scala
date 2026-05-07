@@ -1,6 +1,10 @@
 import chisel3._
 import chisel3.util._
 
+object State extends ChiselEnum {
+  val idleState, coin2State, coin5State, alarmState, releaseState, fullState = Value
+  }
+import State._
 
 class FSM(maxCount: Int) extends Module {
   val io = IO(new Bundle {
@@ -14,27 +18,26 @@ class FSM(maxCount: Int) extends Module {
     val an = Output(UInt(4.W))
     val tx = Output(Bool())
   })
-
-  object State extends ChiselEnum {
-    val idleState, coin2State, coin5State, alarmState, releaseState, fullState = Value
-  }
-  import State._
-
+  
   val stateReg = RegInit(idleState)
   stateReg := idleState
 
   val extender = Module(new extender(maxCount))
   val DisplayMultiplexer = Module(new DisplayMultiplexer(maxCount))
   val Datapath = Module(new Datapath(maxCount))
+  val SerialComs = Module(new SerialCommunicator(maxCount))
 
   /* Define input registers */
   val prevCoin2 = RegNext(io.coin2)
   val prevCoin5 = RegNext(io.coin5)
   val prevBuy = RegNext(io.buy)
+  val prevPrice = RegNext(io.price)
+
   /* Define trigger */
   val coin2Trigger = io.coin2 && !prevCoin2
   val coin5Trigger = io.coin5 && !prevCoin5
   val buyTrigger = io.buy && !prevBuy
+  val priceTrigger = io.price =/= prevPrice
 
   val Full2 = Datapath.io.Full2
   val Full5 = Datapath.io.Full5
@@ -57,12 +60,23 @@ class FSM(maxCount: Int) extends Module {
       }
     }}
 
+  // Extender multiplexer module
   extender.io.Ringalarm := (stateReg === alarmState)
   extender.io.releasing := (stateReg === releaseState)
   Datapath.io.FSMstate := stateReg.asUInt
+
+  // Display multiplexer module
   DisplayMultiplexer.io.full := (stateReg === fullState)
   DisplayMultiplexer.io.sum := Datapath.io.money
   DisplayMultiplexer.io.price := io.price
+
+  // Serial communicator module
+  io.tx := SerialComs.io.tx
+  SerialComs.io.price := io.price
+  SerialComs.io.sum := Datapath.io.money
+  SerialComs.io.update := coin2Trigger | coin5Trigger | buyTrigger | priceTrigger
+
+  // Datapath
   Datapath.io.price := io.price
 
   io.alarm := extender.io.alarm

@@ -2,7 +2,12 @@ import chisel3._
 import chisel3.util._
 import chisel.lib.uart._
 
-class SerialCommunicator extends Module {
+object WriteState extends ChiselEnum {
+  val sIdle, sClear, sPrice, sSum = Value
+}
+import WriteState._
+
+class SerialCommunicator(maxCount: Int) extends Module {
     val io = IO(new Bundle{
         val price = Input(UInt(5.W))
         val sum = Input(UInt(8.W))
@@ -10,85 +15,72 @@ class SerialCommunicator extends Module {
         val tx = Output(Bool())
     })
 
-
     def uintToAscii(value: UInt): Seq[UInt] = {
-        val hundreds = (value / 100.U) % 10.U
         val tens     = (value / 10.U) % 10.U
         val ones     = value % 10.U
-        Seq(hundreds + 48.U, tens + 48.U, ones + 48.U)
+        Seq(tens + 48.U(8.W), ones + 48.U(8.W))
     }
 
-    val uart = Module(new BufferedTx(100000000, 115200))
+    def sendMsg(msg: Vec[UInt], nextState: WriteState.Type) {
+        when (index < msg.length.U) {
+            uart.io.channel.valid := true.B
+            uart.io.channel.bits  := msg(index)
+            when(uart.io.channel.ready) {
+                index := index + 1.U
+            }
+        } .otherwise {
+            index      := 0.U
+            writeState := nextState
+        }
+    }
+
+    /* Init UART */
+    val uart = Module(new BufferedTx(maxCount, 115200))
     io.tx := uart.io.txd
-
-    val formattedPrice = VecInit(Seq(
-        'P'.U, 'r'.U, 'i'.U, 'c'.U, 'e'.U, ':'.U, ' '.U
-    ) ++ uintToAscii(io.price) ++ Seq(' '.U, 'A'.U, 'T'.U, 'S'.U, '\n'.U))
-
-    val formattedSum = VecInit(Seq(
-        'I'.U, 'n'.U, 's'.U, 'e'.U, 'r'.U, 't'.U, 'e'.U, 'd'.U, ':'.U, ' '.U
-    ) ++ uintToAscii(io.sum) ++ Seq(' '.U, 'A'.U, 'T'.U, 'S'.U, '\n'.U))
-    
-    val clearCmd = VecInit(27.U, '['.U, '2'.U, 'J'.U, 27.U, '['.U, 'H'.U)
-
-    // 00 = no write
-    // 01 = clear screen
-    // 10 = write price
-    // 11 = write sum
-    val write = RegInit(0.U(2.W)) 
-    val refresh = RegInit(false.B) 
-    val index = RegInit(0.U(8.W))
-    when (io.update && write === 0.U) {
-        index := 0.U
-        write := "b01".U
-    } .elsewhen (io.update && write =/= 0.U) {
-        refresh := true.B
-    }
-
     uart.io.channel.valid := false.B
     uart.io.channel.bits  := 0.U
 
-    when (write === "b01".U) {
-        when (index < clearCmd.length.U) { 
-            uart.io.channel.valid := true.B
-            uart.io.channel.bits := clearCmd(index)
+    /* Init messages */
+    val formattedPrice = VecInit(
+        Seq('P'.U, 'r'.U, 'i'.U, 'c'.U, 'e'.U, ':'.U, ' '.U) ++
+        uintToAscii(io.price) ++
+        Seq(' '.U, 'A'.U, 'T'.U, 'S'.U, '\r'.U, '\n'.U)
+    )
+    val formattedSum = VecInit(
+        Seq('I'.U, 'n'.U, 's'.U, 'e'.U, 'r'.U, 't'.U, 'e'.U, 'd'.U, ':'.U, ' '.U) ++ 
+        uintToAscii(io.sum) ++ 
+        Seq(' '.U, 'A'.U, 'T'.U, 'S'.U, '\r'.U, '\n'.U)
+    )
+    val clearCmd = VecInit(27.U(8.W), '['.U, '2'.U, 'J'.U, 27.U, '['.U, 'H'.U) // Ascii codes for clear screen and move to top left
+    val startOfRow = VecInit(13.U(8.W)) // Ascii value for \r
 
-            when(uart.io.channel.ready) {
-                index := index + 1.U
-            }
-        } .otherwise {
+    val writeState = RegInit(sIdle) 
+    val refresh = RegInit(false.B) // Makes the screen refresh upon completion of last write
+    val index = RegInit(0.U(5.W)) // The longest message is 18 bytes wide
+
+    when(io.update && writeState =/= sIdle) {
+        refresh := true.B
+    }
+
+    switch(writeState) {
+        is (sIdle) {
             index := 0.U
-            write := "b10".U
+            refresh := false.B
+
+            when (io.update) {
+                writeState := sClear
+            }
         }
-    } .elsewhen (write === "b10".U) {
-        when (index < formattedPrice.length.U) {
-            uart.io.channel.valid := true.B
-            uart.io.channel.bits := formattedPrice(index)
-
-            when(uart.io.channel.ready) {
-                index := index + 1.U
-            }
-        } .otherwise {
-            index := 0.U
-            write := "b11".U
+        is (sClear) {
+            sendMsg(clearCmd, sPrice)
         }
-    } .elsewhen (write === "b11".U) {
-        when (index < formattedSum.length.U) {
-            uart.io.channel.valid := true.B
-            uart.io.channel.bits := formattedSum(index)
-
-            when(uart.io.channel.ready) {
-                index := index + 1.U
-            }
-        } .otherwise {
-            index := 0.U
-            
-            when(refresh) {
-                write := "b01".U 
-                refresh := false.B
-            } .otherwise {
-                write := "b00".U 
-            }
+        is (sPrice) {
+            sendMsg(formattedPrice, sSum)
+        }
+        is (sSum) {
+            val nextState = Mux(refresh, sClear, sIdle)
+            sendMsg(formattedSum, nextState)
+            refresh := false.B
         }
     }
 }

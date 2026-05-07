@@ -5,7 +5,17 @@
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
-    "typeName":"FSM$State",
+    "typeName":"WriteState",
+    "definition":{
+      "sIdle":0,
+      "sClear":1,
+      "sPrice":2,
+      "sSum":3
+    }
+  },
+  {
+    "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
+    "typeName":"State",
     "definition":{
       "coin2State":1,
       "coin5State":2,
@@ -18,7 +28,7 @@
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
     "target":"FSM.FSM.stateReg",
-    "enumTypeName":"FSM$State"
+    "enumTypeName":"State"
   },
   {
     "class":"firrtl.transforms.BlackBoxTargetDirAnno",
