@@ -15,6 +15,23 @@ class FSM(maxCount: Int) extends Module {
     val tx = Output(Bool())
   })
 
+
+    // Debouncing buttons
+  //Coin2
+  val ButtonDeb1 = Module(new ButtonDebouncer(maxCount/100))
+  ButtonDeb1.io.inp := io.coin2
+  val debCoin2 = ButtonDeb1.io.out
+  // Coin5
+  val ButtonDeb2 = Module(new ButtonDebouncer(maxCount/100))
+  ButtonDeb2.io.inp := io.coin5
+  val debCoin5 = ButtonDeb2.io.out
+
+  //Buy
+  val ButtonDeb3 = Module(new ButtonDebouncer(maxCount/100))
+  ButtonDeb3.io.inp := io.buy
+  val debBuy = ButtonDeb3.io.out
+
+
   object State extends ChiselEnum {
     val idleState, coin2State, coin5State, alarmState, releaseState, fullState = Value
   }
@@ -28,13 +45,13 @@ class FSM(maxCount: Int) extends Module {
   val Datapath = Module(new Datapath(maxCount))
 
   /* Define input registers */
-  val prevCoin2 = RegNext(io.coin2)
-  val prevCoin5 = RegNext(io.coin5)
-  val prevBuy = RegNext(io.buy)
+  val prevCoin2 = RegNext(debCoin2)
+  val prevCoin5 = RegNext(debCoin5)
+  val prevBuy = RegNext(debBuy)
   /* Define trigger */
-  val coin2Trigger = io.coin2 && !prevCoin2
-  val coin5Trigger = io.coin5 && !prevCoin5
-  val buyTrigger = io.buy && !prevBuy
+  val coin2Trigger = debCoin2 && !prevCoin2   //io.coin2
+  val coin5Trigger = debCoin5 && !prevCoin5
+  val buyTrigger = debBuy && !prevBuy
 
   val Full2 = Datapath.io.Full2
   val Full5 = Datapath.io.Full5
