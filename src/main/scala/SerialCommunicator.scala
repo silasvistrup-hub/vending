@@ -16,7 +16,7 @@ class SerialCommunicator(maxCount: Int) extends Module {
     })
 
     /* Init UART */
-    val uart = Module(new BufferedTx(maxCount, 115200))
+    val uart = Module(new BufferedTx(math.max(115200, maxCount), 115200)) // 1 tick in sim, maxCount in FPGA
     io.tx := uart.io.txd
   
 

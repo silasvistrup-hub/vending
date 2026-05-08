@@ -4,7 +4,7 @@ import chisel3.util._
 
 class extender(maxCount: Int) extends Module {
   val io = IO(new Bundle {
-    val Ringalarm = Input(Bool())
+    val ringAlarm = Input(Bool())
     val releasing = Input(Bool())
     val alarm = Output(Bool())
     val releaseCan = Output(Bool())
@@ -27,27 +27,28 @@ class extender(maxCount: Int) extends Module {
   val tick = tickGenerator(maxCount)
   val countSec = RegInit(0.U(10.W))
 
-
-
-  when(tick) {
-    countSec := countSec + 1.U
-  }
-
   val alarm = RegInit(false.B)
   val releaseCan = RegInit(false.B)
 
-  when(io.Ringalarm) {
+
+  when(tick && alarm) {
+    countSec := countSec + 1.U
+  }
+
+
+  when(io.ringAlarm) {
     alarm := true.B
-    countSec := 1.U
+    countSec := 0.U
   }
   when(io.releasing) {
     releaseCan := true.B
-    countSec := 1.U
+    countSec := 0.U
   }
 
-  when(countSec === 0.U) {
+  when(countSec === 5.U) {
     alarm := false.B
     releaseCan := false.B
+    countSec := 0.U
   }
   io.alarm := alarm
   io.releaseCan := releaseCan

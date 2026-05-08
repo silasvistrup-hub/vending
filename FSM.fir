@@ -9,7 +9,7 @@ circuit FSM :
       reset => (reset, UInt<32>("h0")) @[src/main/scala/TickGenerator.scala 8:24]
     wire tick : UInt<1> @[src/main/scala/TickGenerator.scala 9:25]
     tick <= UInt<1>("h0") @[src/main/scala/TickGenerator.scala 9:25]
-    node _T = sub(UInt<17>("h186a0"), UInt<1>("h1")) @[src/main/scala/TickGenerator.scala 11:32]
+    node _T = sub(UInt<20>("hf4240"), UInt<1>("h1")) @[src/main/scala/TickGenerator.scala 11:32]
     node _T_1 = tail(_T, 1) @[src/main/scala/TickGenerator.scala 11:32]
     node _T_2 = eq(tickCnt, _T_1) @[src/main/scala/TickGenerator.scala 11:16]
     when _T_2 : @[src/main/scala/TickGenerator.scala 11:40]
@@ -30,22 +30,25 @@ circuit FSM :
     tickGenerator.clock <= clock
     tickGenerator.reset <= reset
     reg sync_REG : UInt<1>, clock with :
-      reset => (UInt<1>("h0"), sync_REG) @[src/main/scala/ButtonDebouncer.scala 16:29]
-    sync_REG <= io.inp @[src/main/scala/ButtonDebouncer.scala 16:29]
+      reset => (UInt<1>("h0"), sync_REG) @[src/main/scala/ButtonDebouncer.scala 13:29]
+    sync_REG <= io.inp @[src/main/scala/ButtonDebouncer.scala 13:29]
     reg sync : UInt<1>, clock with :
-      reset => (UInt<1>("h0"), sync) @[src/main/scala/ButtonDebouncer.scala 16:21]
-    sync <= sync_REG @[src/main/scala/ButtonDebouncer.scala 16:21]
+      reset => (UInt<1>("h0"), sync) @[src/main/scala/ButtonDebouncer.scala 13:21]
+    sync <= sync_REG @[src/main/scala/ButtonDebouncer.scala 13:21]
     reg btnDebReg : UInt<1>, clock with :
-      reset => (reset, UInt<1>("h0")) @[src/main/scala/ButtonDebouncer.scala 19:26]
-    reg debCnt : UInt<32>, clock with :
-      reset => (reset, UInt<32>("h0")) @[src/main/scala/ButtonDebouncer.scala 20:24]
-    node _debCnt_T = add(debCnt, UInt<1>("h1")) @[src/main/scala/ButtonDebouncer.scala 23:20]
-    node _debCnt_T_1 = tail(_debCnt_T, 1) @[src/main/scala/ButtonDebouncer.scala 23:20]
-    debCnt <= _debCnt_T_1 @[src/main/scala/ButtonDebouncer.scala 23:10]
-    when tickGenerator.io.tickOut : @[src/main/scala/ButtonDebouncer.scala 24:18]
-      debCnt <= UInt<1>("h0") @[src/main/scala/ButtonDebouncer.scala 25:11]
-      btnDebReg <= sync @[src/main/scala/ButtonDebouncer.scala 26:15]
-    io.out <= btnDebReg @[src/main/scala/ButtonDebouncer.scala 30:10]
+      reset => (reset, UInt<1>("h0")) @[src/main/scala/ButtonDebouncer.scala 16:26]
+    reg tickCnt : UInt<4>, clock with :
+      reset => (reset, UInt<4>("h0")) @[src/main/scala/ButtonDebouncer.scala 17:24]
+    node _T = eq(tickCnt, UInt<3>("h5")) @[src/main/scala/ButtonDebouncer.scala 19:17]
+    when _T : @[src/main/scala/ButtonDebouncer.scala 19:26]
+      tickCnt <= UInt<1>("h0") @[src/main/scala/ButtonDebouncer.scala 20:13]
+      btnDebReg <= sync @[src/main/scala/ButtonDebouncer.scala 21:15]
+    else :
+      when tickGenerator.io.tickOut : @[src/main/scala/ButtonDebouncer.scala 23:37]
+        node _tickCnt_T = add(tickCnt, UInt<1>("h1")) @[src/main/scala/ButtonDebouncer.scala 24:26]
+        node _tickCnt_T_1 = tail(_tickCnt_T, 1) @[src/main/scala/ButtonDebouncer.scala 24:26]
+        tickCnt <= _tickCnt_T_1 @[src/main/scala/ButtonDebouncer.scala 24:15]
+    io.out <= btnDebReg @[src/main/scala/ButtonDebouncer.scala 28:10]
 
   module TickGenerator_1 :
     input clock : Clock
@@ -56,7 +59,7 @@ circuit FSM :
       reset => (reset, UInt<32>("h0")) @[src/main/scala/TickGenerator.scala 8:24]
     wire tick : UInt<1> @[src/main/scala/TickGenerator.scala 9:25]
     tick <= UInt<1>("h0") @[src/main/scala/TickGenerator.scala 9:25]
-    node _T = sub(UInt<17>("h186a0"), UInt<1>("h1")) @[src/main/scala/TickGenerator.scala 11:32]
+    node _T = sub(UInt<20>("hf4240"), UInt<1>("h1")) @[src/main/scala/TickGenerator.scala 11:32]
     node _T_1 = tail(_T, 1) @[src/main/scala/TickGenerator.scala 11:32]
     node _T_2 = eq(tickCnt, _T_1) @[src/main/scala/TickGenerator.scala 11:16]
     when _T_2 : @[src/main/scala/TickGenerator.scala 11:40]
@@ -77,22 +80,25 @@ circuit FSM :
     tickGenerator.clock <= clock
     tickGenerator.reset <= reset
     reg sync_REG : UInt<1>, clock with :
-      reset => (UInt<1>("h0"), sync_REG) @[src/main/scala/ButtonDebouncer.scala 16:29]
-    sync_REG <= io.inp @[src/main/scala/ButtonDebouncer.scala 16:29]
+      reset => (UInt<1>("h0"), sync_REG) @[src/main/scala/ButtonDebouncer.scala 13:29]
+    sync_REG <= io.inp @[src/main/scala/ButtonDebouncer.scala 13:29]
     reg sync : UInt<1>, clock with :
-      reset => (UInt<1>("h0"), sync) @[src/main/scala/ButtonDebouncer.scala 16:21]
-    sync <= sync_REG @[src/main/scala/ButtonDebouncer.scala 16:21]
+      reset => (UInt<1>("h0"), sync) @[src/main/scala/ButtonDebouncer.scala 13:21]
+    sync <= sync_REG @[src/main/scala/ButtonDebouncer.scala 13:21]
     reg btnDebReg : UInt<1>, clock with :
-      reset => (reset, UInt<1>("h0")) @[src/main/scala/ButtonDebouncer.scala 19:26]
-    reg debCnt : UInt<32>, clock with :
-      reset => (reset, UInt<32>("h0")) @[src/main/scala/ButtonDebouncer.scala 20:24]
-    node _debCnt_T = add(debCnt, UInt<1>("h1")) @[src/main/scala/ButtonDebouncer.scala 23:20]
-    node _debCnt_T_1 = tail(_debCnt_T, 1) @[src/main/scala/ButtonDebouncer.scala 23:20]
-    debCnt <= _debCnt_T_1 @[src/main/scala/ButtonDebouncer.scala 23:10]
-    when tickGenerator.io.tickOut : @[src/main/scala/ButtonDebouncer.scala 24:18]
-      debCnt <= UInt<1>("h0") @[src/main/scala/ButtonDebouncer.scala 25:11]
-      btnDebReg <= sync @[src/main/scala/ButtonDebouncer.scala 26:15]
-    io.out <= btnDebReg @[src/main/scala/ButtonDebouncer.scala 30:10]
+      reset => (reset, UInt<1>("h0")) @[src/main/scala/ButtonDebouncer.scala 16:26]
+    reg tickCnt : UInt<4>, clock with :
+      reset => (reset, UInt<4>("h0")) @[src/main/scala/ButtonDebouncer.scala 17:24]
+    node _T = eq(tickCnt, UInt<3>("h5")) @[src/main/scala/ButtonDebouncer.scala 19:17]
+    when _T : @[src/main/scala/ButtonDebouncer.scala 19:26]
+      tickCnt <= UInt<1>("h0") @[src/main/scala/ButtonDebouncer.scala 20:13]
+      btnDebReg <= sync @[src/main/scala/ButtonDebouncer.scala 21:15]
+    else :
+      when tickGenerator.io.tickOut : @[src/main/scala/ButtonDebouncer.scala 23:37]
+        node _tickCnt_T = add(tickCnt, UInt<1>("h1")) @[src/main/scala/ButtonDebouncer.scala 24:26]
+        node _tickCnt_T_1 = tail(_tickCnt_T, 1) @[src/main/scala/ButtonDebouncer.scala 24:26]
+        tickCnt <= _tickCnt_T_1 @[src/main/scala/ButtonDebouncer.scala 24:15]
+    io.out <= btnDebReg @[src/main/scala/ButtonDebouncer.scala 28:10]
 
   module TickGenerator_2 :
     input clock : Clock
@@ -103,7 +109,7 @@ circuit FSM :
       reset => (reset, UInt<32>("h0")) @[src/main/scala/TickGenerator.scala 8:24]
     wire tick : UInt<1> @[src/main/scala/TickGenerator.scala 9:25]
     tick <= UInt<1>("h0") @[src/main/scala/TickGenerator.scala 9:25]
-    node _T = sub(UInt<17>("h186a0"), UInt<1>("h1")) @[src/main/scala/TickGenerator.scala 11:32]
+    node _T = sub(UInt<20>("hf4240"), UInt<1>("h1")) @[src/main/scala/TickGenerator.scala 11:32]
     node _T_1 = tail(_T, 1) @[src/main/scala/TickGenerator.scala 11:32]
     node _T_2 = eq(tickCnt, _T_1) @[src/main/scala/TickGenerator.scala 11:16]
     when _T_2 : @[src/main/scala/TickGenerator.scala 11:40]
@@ -124,22 +130,25 @@ circuit FSM :
     tickGenerator.clock <= clock
     tickGenerator.reset <= reset
     reg sync_REG : UInt<1>, clock with :
-      reset => (UInt<1>("h0"), sync_REG) @[src/main/scala/ButtonDebouncer.scala 16:29]
-    sync_REG <= io.inp @[src/main/scala/ButtonDebouncer.scala 16:29]
+      reset => (UInt<1>("h0"), sync_REG) @[src/main/scala/ButtonDebouncer.scala 13:29]
+    sync_REG <= io.inp @[src/main/scala/ButtonDebouncer.scala 13:29]
     reg sync : UInt<1>, clock with :
-      reset => (UInt<1>("h0"), sync) @[src/main/scala/ButtonDebouncer.scala 16:21]
-    sync <= sync_REG @[src/main/scala/ButtonDebouncer.scala 16:21]
+      reset => (UInt<1>("h0"), sync) @[src/main/scala/ButtonDebouncer.scala 13:21]
+    sync <= sync_REG @[src/main/scala/ButtonDebouncer.scala 13:21]
     reg btnDebReg : UInt<1>, clock with :
-      reset => (reset, UInt<1>("h0")) @[src/main/scala/ButtonDebouncer.scala 19:26]
-    reg debCnt : UInt<32>, clock with :
-      reset => (reset, UInt<32>("h0")) @[src/main/scala/ButtonDebouncer.scala 20:24]
-    node _debCnt_T = add(debCnt, UInt<1>("h1")) @[src/main/scala/ButtonDebouncer.scala 23:20]
-    node _debCnt_T_1 = tail(_debCnt_T, 1) @[src/main/scala/ButtonDebouncer.scala 23:20]
-    debCnt <= _debCnt_T_1 @[src/main/scala/ButtonDebouncer.scala 23:10]
-    when tickGenerator.io.tickOut : @[src/main/scala/ButtonDebouncer.scala 24:18]
-      debCnt <= UInt<1>("h0") @[src/main/scala/ButtonDebouncer.scala 25:11]
-      btnDebReg <= sync @[src/main/scala/ButtonDebouncer.scala 26:15]
-    io.out <= btnDebReg @[src/main/scala/ButtonDebouncer.scala 30:10]
+      reset => (reset, UInt<1>("h0")) @[src/main/scala/ButtonDebouncer.scala 16:26]
+    reg tickCnt : UInt<4>, clock with :
+      reset => (reset, UInt<4>("h0")) @[src/main/scala/ButtonDebouncer.scala 17:24]
+    node _T = eq(tickCnt, UInt<3>("h5")) @[src/main/scala/ButtonDebouncer.scala 19:17]
+    when _T : @[src/main/scala/ButtonDebouncer.scala 19:26]
+      tickCnt <= UInt<1>("h0") @[src/main/scala/ButtonDebouncer.scala 20:13]
+      btnDebReg <= sync @[src/main/scala/ButtonDebouncer.scala 21:15]
+    else :
+      when tickGenerator.io.tickOut : @[src/main/scala/ButtonDebouncer.scala 23:37]
+        node _tickCnt_T = add(tickCnt, UInt<1>("h1")) @[src/main/scala/ButtonDebouncer.scala 24:26]
+        node _tickCnt_T_1 = tail(_tickCnt_T, 1) @[src/main/scala/ButtonDebouncer.scala 24:26]
+        tickCnt <= _tickCnt_T_1 @[src/main/scala/ButtonDebouncer.scala 24:15]
+    io.out <= btnDebReg @[src/main/scala/ButtonDebouncer.scala 28:10]
 
   module extender :
     input clock : Clock

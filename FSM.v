@@ -7,8 +7,8 @@ module TickGenerator(
   reg [31:0] _RAND_0;
 `endif // RANDOMIZE_REG_INIT
   reg [31:0] tickCnt; // @[src/main/scala/TickGenerator.scala 8:24]
-  wire [16:0] _T_1 = 17'h186a0 - 17'h1; // @[src/main/scala/TickGenerator.scala 11:32]
-  wire [31:0] _GEN_2 = {{15'd0}, _T_1}; // @[src/main/scala/TickGenerator.scala 11:16]
+  wire [19:0] _T_1 = 20'hf4240 - 20'h1; // @[src/main/scala/TickGenerator.scala 11:32]
+  wire [31:0] _GEN_2 = {{12'd0}, _T_1}; // @[src/main/scala/TickGenerator.scala 11:16]
   wire  tick = tickCnt == _GEN_2; // @[src/main/scala/TickGenerator.scala 11:16]
   wire [31:0] _tickCnt_T_1 = tickCnt + 32'h1; // @[src/main/scala/TickGenerator.scala 15:24]
   assign io_tickOut = tickCnt == _GEN_2; // @[src/main/scala/TickGenerator.scala 11:16]
@@ -77,28 +77,38 @@ module ButtonDebouncer(
   reg [31:0] _RAND_0;
   reg [31:0] _RAND_1;
   reg [31:0] _RAND_2;
+  reg [31:0] _RAND_3;
 `endif // RANDOMIZE_REG_INIT
   wire  tickGenerator_clock; // @[src/main/scala/ButtonDebouncer.scala 10:29]
   wire  tickGenerator_reset; // @[src/main/scala/ButtonDebouncer.scala 10:29]
   wire  tickGenerator_io_tickOut; // @[src/main/scala/ButtonDebouncer.scala 10:29]
-  reg  sync_REG; // @[src/main/scala/ButtonDebouncer.scala 16:29]
-  reg  sync; // @[src/main/scala/ButtonDebouncer.scala 16:21]
-  reg  btnDebReg; // @[src/main/scala/ButtonDebouncer.scala 19:26]
+  reg  sync_REG; // @[src/main/scala/ButtonDebouncer.scala 13:29]
+  reg  sync; // @[src/main/scala/ButtonDebouncer.scala 13:21]
+  reg  btnDebReg; // @[src/main/scala/ButtonDebouncer.scala 16:26]
+  reg [3:0] tickCnt; // @[src/main/scala/ButtonDebouncer.scala 17:24]
+  wire [3:0] _tickCnt_T_1 = tickCnt + 4'h1; // @[src/main/scala/ButtonDebouncer.scala 24:26]
   TickGenerator tickGenerator ( // @[src/main/scala/ButtonDebouncer.scala 10:29]
     .clock(tickGenerator_clock),
     .reset(tickGenerator_reset),
     .io_tickOut(tickGenerator_io_tickOut)
   );
-  assign io_out = btnDebReg; // @[src/main/scala/ButtonDebouncer.scala 30:10]
+  assign io_out = btnDebReg; // @[src/main/scala/ButtonDebouncer.scala 28:10]
   assign tickGenerator_clock = clock;
   assign tickGenerator_reset = reset;
   always @(posedge clock) begin
-    sync_REG <= io_inp; // @[src/main/scala/ButtonDebouncer.scala 16:29]
-    sync <= sync_REG; // @[src/main/scala/ButtonDebouncer.scala 16:21]
-    if (reset) begin // @[src/main/scala/ButtonDebouncer.scala 19:26]
-      btnDebReg <= 1'h0; // @[src/main/scala/ButtonDebouncer.scala 19:26]
-    end else if (tickGenerator_io_tickOut) begin // @[src/main/scala/ButtonDebouncer.scala 24:18]
-      btnDebReg <= sync; // @[src/main/scala/ButtonDebouncer.scala 26:15]
+    sync_REG <= io_inp; // @[src/main/scala/ButtonDebouncer.scala 13:29]
+    sync <= sync_REG; // @[src/main/scala/ButtonDebouncer.scala 13:21]
+    if (reset) begin // @[src/main/scala/ButtonDebouncer.scala 16:26]
+      btnDebReg <= 1'h0; // @[src/main/scala/ButtonDebouncer.scala 16:26]
+    end else if (tickCnt == 4'h5) begin // @[src/main/scala/ButtonDebouncer.scala 19:26]
+      btnDebReg <= sync; // @[src/main/scala/ButtonDebouncer.scala 21:15]
+    end
+    if (reset) begin // @[src/main/scala/ButtonDebouncer.scala 17:24]
+      tickCnt <= 4'h0; // @[src/main/scala/ButtonDebouncer.scala 17:24]
+    end else if (tickCnt == 4'h5) begin // @[src/main/scala/ButtonDebouncer.scala 19:26]
+      tickCnt <= 4'h0; // @[src/main/scala/ButtonDebouncer.scala 20:13]
+    end else if (tickGenerator_io_tickOut) begin // @[src/main/scala/ButtonDebouncer.scala 23:37]
+      tickCnt <= _tickCnt_T_1; // @[src/main/scala/ButtonDebouncer.scala 24:15]
     end
   end
 // Register and memory initialization
@@ -143,6 +153,8 @@ initial begin
   sync = _RAND_1[0:0];
   _RAND_2 = {1{`RANDOM}};
   btnDebReg = _RAND_2[0:0];
+  _RAND_3 = {1{`RANDOM}};
+  tickCnt = _RAND_3[3:0];
 `endif // RANDOMIZE_REG_INIT
   `endif // RANDOMIZE
 end // initial

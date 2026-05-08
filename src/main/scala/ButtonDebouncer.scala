@@ -7,24 +7,22 @@ class ButtonDebouncer(maxCount: Int) extends Module {
     val out = Output(Bool())
   })
 
-  val tickGenerator = Module(new TickGenerator(100000))
-  val tickdeb = tickGenerator.io.tickOut   //tickGenerator.io.out
-
-
+  val tickGenerator = Module(new TickGenerator(math.max(1, maxCount / 100))) // 1 tick for sim, 1.000.000 for FPGA
 
   // Synchronise buttons
   val sync = RegNext(RegNext(io.inp))
 
   // Debounce buttons
   val btnDebReg = RegInit(false.B)
-  val debCnt = RegInit (0.U(32.W))
-  val debTick = tickdeb
+  val tickCnt = RegInit(0.U(4.W))
 
-  debCnt := debCnt + 1.U
-  when (debTick) {
-    debCnt:= 0.U
+  when (tickCnt === 4.U) { // 40 ms [Source: https://electronics.stackexchange.com/questions/50377/time-parameters-of-pressing-a-tact-button-by-people]
+    tickCnt := 0.U
     btnDebReg := sync
-
+  }. otherwise {
+    when (tickGenerator.io.tickOut) {
+      tickCnt := tickCnt + 1.U
+    }
   }
 
   io.out := btnDebReg

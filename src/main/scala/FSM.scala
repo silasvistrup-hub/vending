@@ -3,7 +3,7 @@ import chisel3.util._
 
 object State extends ChiselEnum {
   val idleState, coin2State, coin5State, alarmState, releaseState, fullState = Value
-  }
+}
 import State._
 
 class FSM(maxCount: Int) extends Module {
@@ -20,7 +20,7 @@ class FSM(maxCount: Int) extends Module {
   })
 
 
-    // Debouncing buttons
+  // Debouncing buttons
   //Coin2
   val ButtonDeb1 = Module(new ButtonDebouncer(maxCount/100))
   ButtonDeb1.io.inp := io.coin2
@@ -29,17 +29,10 @@ class FSM(maxCount: Int) extends Module {
   val ButtonDeb2 = Module(new ButtonDebouncer(maxCount/100))
   ButtonDeb2.io.inp := io.coin5
   val debCoin5 = ButtonDeb2.io.out
-
   //Buy
   val ButtonDeb3 = Module(new ButtonDebouncer(maxCount/100))
   ButtonDeb3.io.inp := io.buy
   val debBuy = ButtonDeb3.io.out
-
-
-  object State extends ChiselEnum {
-    val idleState, coin2State, coin5State, alarmState, releaseState, fullState = Value
-  }
-  import State._
 
   val stateReg = RegInit(idleState)
   stateReg := idleState
@@ -56,7 +49,7 @@ class FSM(maxCount: Int) extends Module {
   val prevPrice = RegNext(io.price)
 
   /* Define trigger */
-  val coin2Trigger = debCoin2 && !prevCoin2   //io.coin2
+  val coin2Trigger = debCoin2 && !prevCoin2
   val coin5Trigger = debCoin5 && !prevCoin5
   val buyTrigger = debBuy && !prevBuy
   val priceTrigger = io.price =/= prevPrice
@@ -80,10 +73,11 @@ class FSM(maxCount: Int) extends Module {
       }.elsewhen(coin5Trigger && Full5) {
         stateReg := fullState
       }
-    }}
+    }
+  }
 
   // Extender multiplexer module
-  extender.io.Ringalarm := (stateReg === alarmState)
+  extender.io.ringAlarm := (stateReg === alarmState)
   extender.io.releasing := (stateReg === releaseState)
   Datapath.io.FSMstate := stateReg.asUInt
 
@@ -105,10 +99,8 @@ class FSM(maxCount: Int) extends Module {
   io.releaseCan := extender.io.releaseCan
   io.seg := DisplayMultiplexer.io.seg
   io.an := DisplayMultiplexer.io.an
-  io.tx := false.B
-
-
 }
+
 object FSM extends App {
   emitVerilog(new FSM(100000000))
 }
