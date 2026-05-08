@@ -1,5 +1,41 @@
 [
   {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~FSM|TickGenerator",
+    "duplicate":"~FSM|FSM/ButtonDeb1:ButtonDebouncer/tickGenerator:TickGenerator",
+    "index":0.0
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~FSM|ButtonDebouncer",
+    "duplicate":"~FSM|FSM/ButtonDeb1:ButtonDebouncer",
+    "index":0.07142857142857142
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~FSM|TickGenerator_1",
+    "duplicate":"~FSM|FSM/ButtonDeb2:ButtonDebouncer/tickGenerator:TickGenerator",
+    "index":0.14285714285714285
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~FSM|ButtonDebouncer_1",
+    "duplicate":"~FSM|FSM/ButtonDeb2:ButtonDebouncer",
+    "index":0.21428571428571427
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~FSM|TickGenerator_2",
+    "duplicate":"~FSM|FSM/ButtonDeb3:ButtonDebouncer/tickGenerator:TickGenerator",
+    "index":0.2857142857142857
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~FSM|ButtonDebouncer_2",
+    "duplicate":"~FSM|FSM/ButtonDeb3:ButtonDebouncer",
+    "index":0.35714285714285715
+  },
+  {
     "class":"firrtl.EmitCircuitAnnotation",
     "emitter":"firrtl.VerilogEmitter"
   },
@@ -7,15 +43,15 @@
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
     "typeName":"WriteState",
     "definition":{
-      "sIdle":0,
-      "sClear":1,
-      "sPrice":2,
-      "sSum":3
+      "wIdle":0,
+      "wClear":1,
+      "wPrice":2,
+      "wSum":3
     }
   },
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumDefAnnotation",
-    "typeName":"State",
+    "typeName":"FSM$State",
     "definition":{
       "coin2State":1,
       "coin5State":2,
@@ -28,7 +64,7 @@
   {
     "class":"chisel3.experimental.EnumAnnotations$EnumComponentAnnotation",
     "target":"FSM.FSM.stateReg",
-    "enumTypeName":"State"
+    "enumTypeName":"FSM$State"
   },
   {
     "class":"firrtl.transforms.BlackBoxTargetDirAnno",

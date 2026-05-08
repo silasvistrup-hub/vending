@@ -1,3 +1,156 @@
+module TickGenerator(
+  input   clock,
+  input   reset,
+  output  io_tickOut // @[src/main/scala/TickGenerator.scala 5:14]
+);
+`ifdef RANDOMIZE_REG_INIT
+  reg [31:0] _RAND_0;
+`endif // RANDOMIZE_REG_INIT
+  reg [31:0] tickCnt; // @[src/main/scala/TickGenerator.scala 8:24]
+  wire [16:0] _T_1 = 17'h186a0 - 17'h1; // @[src/main/scala/TickGenerator.scala 11:32]
+  wire [31:0] _GEN_2 = {{15'd0}, _T_1}; // @[src/main/scala/TickGenerator.scala 11:16]
+  wire  tick = tickCnt == _GEN_2; // @[src/main/scala/TickGenerator.scala 11:16]
+  wire [31:0] _tickCnt_T_1 = tickCnt + 32'h1; // @[src/main/scala/TickGenerator.scala 15:24]
+  assign io_tickOut = tickCnt == _GEN_2; // @[src/main/scala/TickGenerator.scala 11:16]
+  always @(posedge clock) begin
+    if (reset) begin // @[src/main/scala/TickGenerator.scala 8:24]
+      tickCnt <= 32'h0; // @[src/main/scala/TickGenerator.scala 8:24]
+    end else if (tick) begin // @[src/main/scala/TickGenerator.scala 11:40]
+      tickCnt <= 32'h0; // @[src/main/scala/TickGenerator.scala 12:13]
+    end else begin
+      tickCnt <= _tickCnt_T_1; // @[src/main/scala/TickGenerator.scala 15:13]
+    end
+  end
+// Register and memory initialization
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+`ifdef FIRRTL_BEFORE_INITIAL
+`FIRRTL_BEFORE_INITIAL
+`endif
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+`ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  tickCnt = _RAND_0[31:0];
+`endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`ifdef FIRRTL_AFTER_INITIAL
+`FIRRTL_AFTER_INITIAL
+`endif
+`endif // SYNTHESIS
+endmodule
+module ButtonDebouncer(
+  input   clock,
+  input   reset,
+  input   io_inp, // @[src/main/scala/ButtonDebouncer.scala 5:14]
+  output  io_out // @[src/main/scala/ButtonDebouncer.scala 5:14]
+);
+`ifdef RANDOMIZE_REG_INIT
+  reg [31:0] _RAND_0;
+  reg [31:0] _RAND_1;
+  reg [31:0] _RAND_2;
+`endif // RANDOMIZE_REG_INIT
+  wire  tickGenerator_clock; // @[src/main/scala/ButtonDebouncer.scala 10:29]
+  wire  tickGenerator_reset; // @[src/main/scala/ButtonDebouncer.scala 10:29]
+  wire  tickGenerator_io_tickOut; // @[src/main/scala/ButtonDebouncer.scala 10:29]
+  reg  sync_REG; // @[src/main/scala/ButtonDebouncer.scala 16:29]
+  reg  sync; // @[src/main/scala/ButtonDebouncer.scala 16:21]
+  reg  btnDebReg; // @[src/main/scala/ButtonDebouncer.scala 19:26]
+  TickGenerator tickGenerator ( // @[src/main/scala/ButtonDebouncer.scala 10:29]
+    .clock(tickGenerator_clock),
+    .reset(tickGenerator_reset),
+    .io_tickOut(tickGenerator_io_tickOut)
+  );
+  assign io_out = btnDebReg; // @[src/main/scala/ButtonDebouncer.scala 30:10]
+  assign tickGenerator_clock = clock;
+  assign tickGenerator_reset = reset;
+  always @(posedge clock) begin
+    sync_REG <= io_inp; // @[src/main/scala/ButtonDebouncer.scala 16:29]
+    sync <= sync_REG; // @[src/main/scala/ButtonDebouncer.scala 16:21]
+    if (reset) begin // @[src/main/scala/ButtonDebouncer.scala 19:26]
+      btnDebReg <= 1'h0; // @[src/main/scala/ButtonDebouncer.scala 19:26]
+    end else if (tickGenerator_io_tickOut) begin // @[src/main/scala/ButtonDebouncer.scala 24:18]
+      btnDebReg <= sync; // @[src/main/scala/ButtonDebouncer.scala 26:15]
+    end
+  end
+// Register and memory initialization
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+`ifdef FIRRTL_BEFORE_INITIAL
+`FIRRTL_BEFORE_INITIAL
+`endif
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+`ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  sync_REG = _RAND_0[0:0];
+  _RAND_1 = {1{`RANDOM}};
+  sync = _RAND_1[0:0];
+  _RAND_2 = {1{`RANDOM}};
+  btnDebReg = _RAND_2[0:0];
+`endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`ifdef FIRRTL_AFTER_INITIAL
+`FIRRTL_AFTER_INITIAL
+`endif
+`endif // SYNTHESIS
+endmodule
 module extender(
   input   clock,
   input   reset,
@@ -13,7 +166,7 @@ module extender(
   reg [31:0] _RAND_3;
 `endif // RANDOMIZE_REG_INIT
   reg [31:0] tick_tickCnt; // @[src/main/scala/extender.scala 14:26]
-  wire  tick = tick_tickCnt == 32'h1869f; // @[src/main/scala/extender.scala 17:18]
+  wire  tick = tick_tickCnt == 32'h5f5e0ff; // @[src/main/scala/extender.scala 17:18]
   wire [31:0] _tick_tickCnt_T_1 = tick_tickCnt + 32'h1; // @[src/main/scala/extender.scala 21:26]
   reg [9:0] countSec; // @[src/main/scala/extender.scala 28:25]
   wire [9:0] _countSec_T_1 = countSec + 10'h1; // @[src/main/scala/extender.scala 33:26]
@@ -154,7 +307,7 @@ module DisplayMultiplexer(
   reg  FullSequence; // @[src/main/scala/DisplayMultiplexer1.scala 15:29]
   reg [3:0] CountTo16; // @[src/main/scala/DisplayMultiplexer1.scala 16:26]
   reg [31:0] tick_tickCnt; // @[src/main/scala/DisplayMultiplexer1.scala 20:26]
-  wire  tick = tick_tickCnt == 32'h1869f; // @[src/main/scala/DisplayMultiplexer1.scala 22:18]
+  wire  tick = tick_tickCnt == 32'h5f5e0ff; // @[src/main/scala/DisplayMultiplexer1.scala 22:18]
   wire [31:0] _tick_tickCnt_T_1 = tick_tickCnt + 32'h1; // @[src/main/scala/DisplayMultiplexer1.scala 26:26]
   reg [31:0] slowTick_tickCnt; // @[src/main/scala/DisplayMultiplexer1.scala 20:26]
   wire  slowTick = slowTick_tickCnt == 32'h2160ebf; // @[src/main/scala/DisplayMultiplexer1.scala 22:18]
@@ -421,39 +574,69 @@ module FSM(
   reg [31:0] _RAND_2;
   reg [31:0] _RAND_3;
 `endif // RANDOMIZE_REG_INIT
-  wire  extender_clock; // @[src/main/scala/FSM.scala 25:24]
-  wire  extender_reset; // @[src/main/scala/FSM.scala 25:24]
-  wire  extender_io_Ringalarm; // @[src/main/scala/FSM.scala 25:24]
-  wire  extender_io_releasing; // @[src/main/scala/FSM.scala 25:24]
-  wire  extender_io_alarm; // @[src/main/scala/FSM.scala 25:24]
-  wire  extender_io_releaseCan; // @[src/main/scala/FSM.scala 25:24]
-  wire  DisplayMultiplexer_clock; // @[src/main/scala/FSM.scala 26:34]
-  wire  DisplayMultiplexer_reset; // @[src/main/scala/FSM.scala 26:34]
-  wire [7:0] DisplayMultiplexer_io_sum; // @[src/main/scala/FSM.scala 26:34]
-  wire [4:0] DisplayMultiplexer_io_price; // @[src/main/scala/FSM.scala 26:34]
-  wire [6:0] DisplayMultiplexer_io_seg; // @[src/main/scala/FSM.scala 26:34]
-  wire [3:0] DisplayMultiplexer_io_an; // @[src/main/scala/FSM.scala 26:34]
-  wire  DisplayMultiplexer_io_full; // @[src/main/scala/FSM.scala 26:34]
-  wire  Datapath_clock; // @[src/main/scala/FSM.scala 27:24]
-  wire  Datapath_reset; // @[src/main/scala/FSM.scala 27:24]
-  wire [4:0] Datapath_io_price; // @[src/main/scala/FSM.scala 27:24]
-  wire [2:0] Datapath_io_FSMstate; // @[src/main/scala/FSM.scala 27:24]
-  wire  Datapath_io_Full2; // @[src/main/scala/FSM.scala 27:24]
-  wire  Datapath_io_Full5; // @[src/main/scala/FSM.scala 27:24]
-  wire  Datapath_io_enough; // @[src/main/scala/FSM.scala 27:24]
-  wire [6:0] Datapath_io_money; // @[src/main/scala/FSM.scala 27:24]
-  reg [2:0] stateReg; // @[src/main/scala/FSM.scala 22:25]
-  reg  prevCoin2; // @[src/main/scala/FSM.scala 31:26]
-  reg  prevCoin5; // @[src/main/scala/FSM.scala 32:26]
-  reg  prevBuy; // @[src/main/scala/FSM.scala 33:24]
-  wire  coin2Trigger = io_coin2 & ~prevCoin2; // @[src/main/scala/FSM.scala 37:31]
-  wire  coin5Trigger = io_coin5 & ~prevCoin5; // @[src/main/scala/FSM.scala 38:31]
-  wire  buyTrigger = io_buy & ~prevBuy; // @[src/main/scala/FSM.scala 39:27]
-  wire [2:0] _GEN_0 = coin5Trigger & Datapath_io_Full5 ? 3'h5 : 3'h0; // @[src/main/scala/FSM.scala 23:12 58:41 59:18]
-  wire [2:0] _GEN_1 = coin2Trigger & Datapath_io_Full2 ? 3'h5 : _GEN_0; // @[src/main/scala/FSM.scala 56:41 57:18]
-  wire [2:0] _GEN_2 = buyTrigger & Datapath_io_enough ? 3'h4 : _GEN_1; // @[src/main/scala/FSM.scala 54:40 55:18]
-  wire [2:0] _GEN_3 = buyTrigger & ~Datapath_io_enough ? 3'h3 : _GEN_2; // @[src/main/scala/FSM.scala 52:41 53:18]
-  extender extender ( // @[src/main/scala/FSM.scala 25:24]
+  wire  ButtonDeb1_clock; // @[src/main/scala/FSM.scala 25:26]
+  wire  ButtonDeb1_reset; // @[src/main/scala/FSM.scala 25:26]
+  wire  ButtonDeb1_io_inp; // @[src/main/scala/FSM.scala 25:26]
+  wire  ButtonDeb1_io_out; // @[src/main/scala/FSM.scala 25:26]
+  wire  ButtonDeb2_clock; // @[src/main/scala/FSM.scala 29:26]
+  wire  ButtonDeb2_reset; // @[src/main/scala/FSM.scala 29:26]
+  wire  ButtonDeb2_io_inp; // @[src/main/scala/FSM.scala 29:26]
+  wire  ButtonDeb2_io_out; // @[src/main/scala/FSM.scala 29:26]
+  wire  ButtonDeb3_clock; // @[src/main/scala/FSM.scala 34:26]
+  wire  ButtonDeb3_reset; // @[src/main/scala/FSM.scala 34:26]
+  wire  ButtonDeb3_io_inp; // @[src/main/scala/FSM.scala 34:26]
+  wire  ButtonDeb3_io_out; // @[src/main/scala/FSM.scala 34:26]
+  wire  extender_clock; // @[src/main/scala/FSM.scala 47:24]
+  wire  extender_reset; // @[src/main/scala/FSM.scala 47:24]
+  wire  extender_io_Ringalarm; // @[src/main/scala/FSM.scala 47:24]
+  wire  extender_io_releasing; // @[src/main/scala/FSM.scala 47:24]
+  wire  extender_io_alarm; // @[src/main/scala/FSM.scala 47:24]
+  wire  extender_io_releaseCan; // @[src/main/scala/FSM.scala 47:24]
+  wire  DisplayMultiplexer_clock; // @[src/main/scala/FSM.scala 48:34]
+  wire  DisplayMultiplexer_reset; // @[src/main/scala/FSM.scala 48:34]
+  wire [7:0] DisplayMultiplexer_io_sum; // @[src/main/scala/FSM.scala 48:34]
+  wire [4:0] DisplayMultiplexer_io_price; // @[src/main/scala/FSM.scala 48:34]
+  wire [6:0] DisplayMultiplexer_io_seg; // @[src/main/scala/FSM.scala 48:34]
+  wire [3:0] DisplayMultiplexer_io_an; // @[src/main/scala/FSM.scala 48:34]
+  wire  DisplayMultiplexer_io_full; // @[src/main/scala/FSM.scala 48:34]
+  wire  Datapath_clock; // @[src/main/scala/FSM.scala 49:24]
+  wire  Datapath_reset; // @[src/main/scala/FSM.scala 49:24]
+  wire [4:0] Datapath_io_price; // @[src/main/scala/FSM.scala 49:24]
+  wire [2:0] Datapath_io_FSMstate; // @[src/main/scala/FSM.scala 49:24]
+  wire  Datapath_io_Full2; // @[src/main/scala/FSM.scala 49:24]
+  wire  Datapath_io_Full5; // @[src/main/scala/FSM.scala 49:24]
+  wire  Datapath_io_enough; // @[src/main/scala/FSM.scala 49:24]
+  wire [6:0] Datapath_io_money; // @[src/main/scala/FSM.scala 49:24]
+  reg [2:0] stateReg; // @[src/main/scala/FSM.scala 44:25]
+  reg  prevCoin2; // @[src/main/scala/FSM.scala 53:26]
+  reg  prevCoin5; // @[src/main/scala/FSM.scala 54:26]
+  reg  prevBuy; // @[src/main/scala/FSM.scala 55:24]
+  wire  coin2Trigger = ButtonDeb1_io_out & ~prevCoin2; // @[src/main/scala/FSM.scala 59:31]
+  wire  coin5Trigger = ButtonDeb2_io_out & ~prevCoin5; // @[src/main/scala/FSM.scala 60:31]
+  wire  buyTrigger = ButtonDeb3_io_out & ~prevBuy; // @[src/main/scala/FSM.scala 61:27]
+  wire [2:0] _GEN_0 = coin5Trigger & Datapath_io_Full5 ? 3'h5 : 3'h0; // @[src/main/scala/FSM.scala 45:12 80:41 81:18]
+  wire [2:0] _GEN_1 = coin2Trigger & Datapath_io_Full2 ? 3'h5 : _GEN_0; // @[src/main/scala/FSM.scala 78:41 79:18]
+  wire [2:0] _GEN_2 = buyTrigger & Datapath_io_enough ? 3'h4 : _GEN_1; // @[src/main/scala/FSM.scala 76:40 77:18]
+  wire [2:0] _GEN_3 = buyTrigger & ~Datapath_io_enough ? 3'h3 : _GEN_2; // @[src/main/scala/FSM.scala 74:41 75:18]
+  ButtonDebouncer ButtonDeb1 ( // @[src/main/scala/FSM.scala 25:26]
+    .clock(ButtonDeb1_clock),
+    .reset(ButtonDeb1_reset),
+    .io_inp(ButtonDeb1_io_inp),
+    .io_out(ButtonDeb1_io_out)
+  );
+  ButtonDebouncer ButtonDeb2 ( // @[src/main/scala/FSM.scala 29:26]
+    .clock(ButtonDeb2_clock),
+    .reset(ButtonDeb2_reset),
+    .io_inp(ButtonDeb2_io_inp),
+    .io_out(ButtonDeb2_io_out)
+  );
+  ButtonDebouncer ButtonDeb3 ( // @[src/main/scala/FSM.scala 34:26]
+    .clock(ButtonDeb3_clock),
+    .reset(ButtonDeb3_reset),
+    .io_inp(ButtonDeb3_io_inp),
+    .io_out(ButtonDeb3_io_out)
+  );
+  extender extender ( // @[src/main/scala/FSM.scala 47:24]
     .clock(extender_clock),
     .reset(extender_reset),
     .io_Ringalarm(extender_io_Ringalarm),
@@ -461,7 +644,7 @@ module FSM(
     .io_alarm(extender_io_alarm),
     .io_releaseCan(extender_io_releaseCan)
   );
-  DisplayMultiplexer DisplayMultiplexer ( // @[src/main/scala/FSM.scala 26:34]
+  DisplayMultiplexer DisplayMultiplexer ( // @[src/main/scala/FSM.scala 48:34]
     .clock(DisplayMultiplexer_clock),
     .reset(DisplayMultiplexer_reset),
     .io_sum(DisplayMultiplexer_io_sum),
@@ -470,7 +653,7 @@ module FSM(
     .io_an(DisplayMultiplexer_io_an),
     .io_full(DisplayMultiplexer_io_full)
   );
-  Datapath Datapath ( // @[src/main/scala/FSM.scala 27:24]
+  Datapath Datapath ( // @[src/main/scala/FSM.scala 49:24]
     .clock(Datapath_clock),
     .reset(Datapath_reset),
     .io_price(Datapath_io_price),
@@ -480,41 +663,50 @@ module FSM(
     .io_enough(Datapath_io_enough),
     .io_money(Datapath_io_money)
   );
-  assign io_releaseCan = extender_io_releaseCan; // @[src/main/scala/FSM.scala 83:17]
-  assign io_alarm = extender_io_alarm; // @[src/main/scala/FSM.scala 82:12]
-  assign io_seg = DisplayMultiplexer_io_seg; // @[src/main/scala/FSM.scala 84:10]
-  assign io_an = DisplayMultiplexer_io_an; // @[src/main/scala/FSM.scala 85:9]
-  assign io_tx = 1'h0; // @[src/main/scala/FSM.scala 86:9]
+  assign io_releaseCan = extender_io_releaseCan; // @[src/main/scala/FSM.scala 105:17]
+  assign io_alarm = extender_io_alarm; // @[src/main/scala/FSM.scala 104:12]
+  assign io_seg = DisplayMultiplexer_io_seg; // @[src/main/scala/FSM.scala 106:10]
+  assign io_an = DisplayMultiplexer_io_an; // @[src/main/scala/FSM.scala 107:9]
+  assign io_tx = 1'h0; // @[src/main/scala/FSM.scala 108:9]
+  assign ButtonDeb1_clock = clock;
+  assign ButtonDeb1_reset = reset;
+  assign ButtonDeb1_io_inp = io_coin2; // @[src/main/scala/FSM.scala 26:21]
+  assign ButtonDeb2_clock = clock;
+  assign ButtonDeb2_reset = reset;
+  assign ButtonDeb2_io_inp = io_coin5; // @[src/main/scala/FSM.scala 30:21]
+  assign ButtonDeb3_clock = clock;
+  assign ButtonDeb3_reset = reset;
+  assign ButtonDeb3_io_inp = io_buy; // @[src/main/scala/FSM.scala 35:21]
   assign extender_clock = clock;
   assign extender_reset = reset;
-  assign extender_io_Ringalarm = stateReg == 3'h3; // @[src/main/scala/FSM.scala 64:38]
-  assign extender_io_releasing = stateReg == 3'h4; // @[src/main/scala/FSM.scala 65:38]
+  assign extender_io_Ringalarm = stateReg == 3'h3; // @[src/main/scala/FSM.scala 86:38]
+  assign extender_io_releasing = stateReg == 3'h4; // @[src/main/scala/FSM.scala 87:38]
   assign DisplayMultiplexer_clock = clock;
   assign DisplayMultiplexer_reset = reset;
-  assign DisplayMultiplexer_io_sum = {{1'd0}, Datapath_io_money}; // @[src/main/scala/FSM.scala 70:29]
-  assign DisplayMultiplexer_io_price = io_price; // @[src/main/scala/FSM.scala 71:31]
-  assign DisplayMultiplexer_io_full = stateReg == 3'h5; // @[src/main/scala/FSM.scala 69:43]
+  assign DisplayMultiplexer_io_sum = {{1'd0}, Datapath_io_money}; // @[src/main/scala/FSM.scala 92:29]
+  assign DisplayMultiplexer_io_price = io_price; // @[src/main/scala/FSM.scala 93:31]
+  assign DisplayMultiplexer_io_full = stateReg == 3'h5; // @[src/main/scala/FSM.scala 91:43]
   assign Datapath_clock = clock;
   assign Datapath_reset = reset;
-  assign Datapath_io_price = io_price; // @[src/main/scala/FSM.scala 80:21]
-  assign Datapath_io_FSMstate = stateReg; // @[src/main/scala/FSM.scala 66:36]
+  assign Datapath_io_price = io_price; // @[src/main/scala/FSM.scala 102:21]
+  assign Datapath_io_FSMstate = stateReg; // @[src/main/scala/FSM.scala 88:36]
   always @(posedge clock) begin
-    if (reset) begin // @[src/main/scala/FSM.scala 22:25]
-      stateReg <= 3'h0; // @[src/main/scala/FSM.scala 22:25]
-    end else if (3'h0 == stateReg) begin // @[src/main/scala/FSM.scala 46:20]
-      if (coin2Trigger & ~Datapath_io_Full2) begin // @[src/main/scala/FSM.scala 48:36]
-        stateReg <= 3'h1; // @[src/main/scala/FSM.scala 49:18]
-      end else if (coin5Trigger & ~Datapath_io_Full5) begin // @[src/main/scala/FSM.scala 50:42]
-        stateReg <= 3'h2; // @[src/main/scala/FSM.scala 51:18]
+    if (reset) begin // @[src/main/scala/FSM.scala 44:25]
+      stateReg <= 3'h0; // @[src/main/scala/FSM.scala 44:25]
+    end else if (3'h0 == stateReg) begin // @[src/main/scala/FSM.scala 68:20]
+      if (coin2Trigger & ~Datapath_io_Full2) begin // @[src/main/scala/FSM.scala 70:36]
+        stateReg <= 3'h1; // @[src/main/scala/FSM.scala 71:18]
+      end else if (coin5Trigger & ~Datapath_io_Full5) begin // @[src/main/scala/FSM.scala 72:42]
+        stateReg <= 3'h2; // @[src/main/scala/FSM.scala 73:18]
       end else begin
         stateReg <= _GEN_3;
       end
     end else begin
-      stateReg <= 3'h0; // @[src/main/scala/FSM.scala 23:12]
+      stateReg <= 3'h0; // @[src/main/scala/FSM.scala 45:12]
     end
-    prevCoin2 <= io_coin2; // @[src/main/scala/FSM.scala 31:26]
-    prevCoin5 <= io_coin5; // @[src/main/scala/FSM.scala 32:26]
-    prevBuy <= io_buy; // @[src/main/scala/FSM.scala 33:24]
+    prevCoin2 <= ButtonDeb1_io_out; // @[src/main/scala/FSM.scala 53:26]
+    prevCoin5 <= ButtonDeb2_io_out; // @[src/main/scala/FSM.scala 54:26]
+    prevBuy <= ButtonDeb3_io_out; // @[src/main/scala/FSM.scala 55:24]
   end
 // Register and memory initialization
 `ifdef RANDOMIZE_GARBAGE_ASSIGN

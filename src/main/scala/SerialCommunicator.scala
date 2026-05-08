@@ -3,7 +3,7 @@ import chisel3.util._
 import chisel.lib.uart._
 
 object WriteState extends ChiselEnum {
-  val sIdle, sClear, sPrice, sSum = Value
+  val wIdle, wClear, wPrice, wSum = Value
 }
 import WriteState._
 
@@ -18,68 +18,77 @@ class SerialCommunicator(maxCount: Int) extends Module {
     /* Init UART */
     val uart = Module(new BufferedTx(maxCount, 115200))
     io.tx := uart.io.txd
-    uart.io.channel.valid := false.B
-    uart.io.channel.bits  := 0.U
+  
 
     def uintToAscii(value: UInt): Seq[UInt] = {
         val tens     = (value / 10.U) % 10.U
         val ones     = value % 10.U
         Seq(tens + 48.U(8.W), ones + 48.U(8.W))
+    }    
+
+    val msg = WireDefault(VecInit(Seq.fill(15)(0.U(8.W))))
+    val writeState = RegInit(wIdle)
+    val writing = RegInit(false.B)
+    val index = RegInit(0.U(4.W))
+
+    uart.io.channel.valid := writing
+    uart.io.channel.bits  := msg(index)
+
+    val currency = Seq(' '.U(8.W), 'A'.U(8.W), 'T'.U(8.W), 'S'.U(8.W), '\n'.U(8.W), '\r'.U(8.W))
+    switch(writeState) {
+        is(wIdle) {
+            when(io.update) {
+                writeState := wClear
+                writing := true.B
+            }
+        }
+        is(wClear) {
+            msg := VecInit(
+                Seq(
+                    27.U(8.W), '['.U(8.W), '1'.U(8.W), ';'.U(8.W), '3'.U(8.W), '2'.U(8.W), 'm'.U(8.W),  // ESC[1;32m 
+                    ' '.U(8.W), 27.U(8.W), '['.U(8.W), '2'.U(8.W), 'J'.U(8.W),                          // ESC[2J
+                    27.U(8.W), '['.U(8.W), 'H'.U(8.W)                                                   // ESC[H
+                )           
+            ) // Bold green text + clear screen + home
+
+            when(!writing) {
+                writeState := wPrice
+                writing := true.B
+            }
+        }
+        is(wPrice) {
+            msg := VecInit(
+                Seq('P'.U(8.W), 'r'.U(8.W), 'i'.U(8.W), 'c'.U(8.W), 'e'.U(8.W), ':'.U(8.W), ' '.U(8.W)) ++
+                uintToAscii(io.price) ++ 
+                currency
+            ) // Price: xx ATS\n\r
+
+            when(!writing) {
+                writeState := wSum
+                writing := true.B
+            }
+        }
+        is(wSum) {
+            msg := VecInit(
+                Seq('M'.U(8.W), 'o'.U(8.W), 'n'.U(8.W), 'e'.U(8.W), 'y'.U(8.W), ':'.U(8.W), ' '.U(8.W)) ++
+                uintToAscii(io.sum) ++ 
+                currency
+            ) // Money: xx ATS\n\r
+
+            when(!writing) {
+                writeState := wIdle
+            }
+        }
     }
 
-    def sendMsg(msg: Vec[UInt], nextState: WriteState.Type): Unit = {
-        when (index < msg.length.U) {
-            uart.io.channel.valid := true.B
-            uart.io.channel.bits  := msg(index)
-            when(uart.io.channel.ready) {
+    when(writing) {
+        when(uart.io.channel.ready) {
+            when(index === 14.U) { // Length of all messages is 15 bytes and index is zero indexed
+                index := 0.U
+                writing := false.B
+            } .otherwise {
                 index := index + 1.U
             }
-        } .otherwise {
-            index      := 0.U
-            writeState := nextState
-        }
-    }
-
-
-    /* Init messages */
-    val formattedPrice = VecInit(
-        Seq('P'.U, 'r'.U, 'i'.U, 'c'.U, 'e'.U, ':'.U, ' '.U) ++
-        uintToAscii(io.price) ++
-        Seq(' '.U, 'A'.U, 'T'.U, 'S'.U, '\r'.U, '\n'.U)
-    )
-    val formattedSum = VecInit(
-        Seq('I'.U, 'n'.U, 's'.U, 'e'.U, 'r'.U, 't'.U, 'e'.U, 'd'.U, ':'.U, ' '.U) ++ 
-        uintToAscii(io.sum) ++ 
-        Seq(' '.U, 'A'.U, 'T'.U, 'S'.U, '\r'.U, '\n'.U)
-    )
-    val clearCmd = VecInit(27.U(8.W), '['.U, '2'.U, 'J'.U, 27.U, '['.U, 'H'.U) // Ascii codes for clear screen and move to top left
-    val startOfRow = VecInit(13.U(8.W)) // Ascii value for \r
-
-    val writeState = RegInit(sIdle) 
-    val refresh = RegInit(false.B) // Makes the screen refresh upon completion of last write
-    val index = RegInit(0.U(5.W)) // The longest message is 18 bytes wide
-
-    when(io.update && writeState =/= sIdle) {
-        refresh := true.B
-    }
-
-    switch(writeState) {
-        is (sIdle) {
-            index := 0.U
-
-            when (io.update || refresh) {
-                writeState := sClear
-                refresh := false.B
-            }
-        }
-        is (sClear) {
-            sendMsg(clearCmd, sPrice)
-        }
-        is (sPrice) {
-            sendMsg(formattedPrice, sSum)
-        }
-        is (sSum) {
-            sendMsg(formattedSum, sIdle)
         }
     }
 }
