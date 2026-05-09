@@ -27,28 +27,25 @@ class extender(maxCount: Int) extends Module {
   val tick = tickGenerator(maxCount)
   val countSec = RegInit(0.U(10.W))
 
-  val alarm = RegInit(false.B)
-  val releaseCan = RegInit(false.B)
-
-
-  when(tick && alarm) {
+  when(tick) {
     countSec := countSec + 1.U
   }
 
+  val alarm = RegInit(false.B)
+  val releaseCan = RegInit(false.B)
 
   when(io.ringAlarm) {
     alarm := true.B
-    countSec := 0.U
+    countSec := 1.U
   }
   when(io.releasing) {
     releaseCan := true.B
-    countSec := 0.U
+    countSec := 1.U
   }
 
-  when(countSec === 5.U) {
+  when(countSec === 0.U) {
     alarm := false.B
     releaseCan := false.B
-    countSec := 0.U
   }
   io.alarm := alarm
   io.releaseCan := releaseCan

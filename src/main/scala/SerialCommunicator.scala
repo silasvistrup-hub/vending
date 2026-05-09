@@ -16,10 +16,9 @@ class SerialCommunicator(maxCount: Int) extends Module {
     })
 
     /* Init UART */
-    val uart = Module(new BufferedTx(math.max(115200, maxCount), 115200)) // 1 tick in sim, maxCount in FPGA
+    val uart = Module(new BufferedTx(math.max(115200, maxCount), 115200)) // 1 cycle in sim, maxCount in FPGA
     io.tx := uart.io.txd
   
-
     def uintToAscii(value: UInt): Seq[UInt] = {
         val tens     = (value / 10.U) % 10.U
         val ones     = value % 10.U
@@ -46,7 +45,7 @@ class SerialCommunicator(maxCount: Int) extends Module {
             msg := VecInit(
                 Seq(
                     27.U(8.W), '['.U(8.W), '1'.U(8.W), ';'.U(8.W), '3'.U(8.W), '2'.U(8.W), 'm'.U(8.W),  // ESC[1;32m 
-                    ' '.U(8.W), 27.U(8.W), '['.U(8.W), '2'.U(8.W), 'J'.U(8.W),                          // ESC[2J
+                    ' '.U(8.W), 27.U(8.W), '['.U(8.W), '2'.U(8.W), 'J'.U(8.W),                          //  ESC[2J
                     27.U(8.W), '['.U(8.W), 'H'.U(8.W)                                                   // ESC[H
                 )           
             ) // Bold green text + clear screen + home
@@ -83,7 +82,7 @@ class SerialCommunicator(maxCount: Int) extends Module {
 
     when(writing) {
         when(uart.io.channel.ready) {
-            when(index === 14.U) { // Length of all messages is 15 bytes and index is zero indexed
+            when(index === 15.U) { // Length of all messages is 15 bytes and index is zero indexed. When index reaches 15, we know all bytes are sent. So we reset
                 index := 0.U
                 writing := false.B
             } .otherwise {
