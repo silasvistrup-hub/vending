@@ -44,7 +44,7 @@ class extender(maxCount: Int) extends Module {
     countSec := 0.U
   }
   
-  when(releasingTrigger) {
+  when(releasingTrigger) { 
     releaseCan := true.B
     countSec := 0.U
   }

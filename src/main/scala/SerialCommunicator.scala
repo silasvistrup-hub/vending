@@ -48,7 +48,7 @@ class SerialCommunicator(maxCount: Int) extends Module {
                     ' '.U(8.W), 27.U(8.W), '['.U(8.W), '2'.U(8.W), 'J'.U(8.W),                          //  ESC[2J
                     27.U(8.W), '['.U(8.W), 'H'.U(8.W)                                                   // ESC[H
                 )           
-            ) // Bold green text + clear screen + home
+            ) // Bold green text + space + clear screen + home
 
             when(!writing) {
                 writeState := wPrice
@@ -82,7 +82,7 @@ class SerialCommunicator(maxCount: Int) extends Module {
 
     when(writing) {
         when(uart.io.channel.ready) {
-            when(index === 15.U) { // Length of all messages is 15 bytes and index is zero indexed. When index reaches 15, we know all bytes are sent. So we reset
+            when(index === 14.U) { // Length of all messages is 15 bytes and index is zero indexed. When index reaches 14, we know all bytes are sent. So we reset
                 index := 0.U
                 writing := false.B
             } .otherwise {

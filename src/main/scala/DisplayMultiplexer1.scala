@@ -3,12 +3,13 @@ import chisel3._
 import chisel3.util._
 
 class DisplayMultiplexer(maxCount: Int) extends Module {
-    val io = IO(new Bundle {
+  val io = IO(new Bundle {
     val sum = Input(UInt(8.W))
     val price = Input(UInt(5.W))
     val seg = Output(UInt(7.W))
     val an = Output(UInt(4.W))
-    val full = Input((Bool()))})
+    val full = Input((Bool()))
+  })
 
   val decoder = Module(new SevenSegDec())
   val CountTo4 = RegInit(0.U(2.W))
