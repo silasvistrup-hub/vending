@@ -57,7 +57,7 @@ circuit FSM :
 
     reg tick_tickCnt : UInt<32>, clock with :
       reset => (UInt<1>("h0"), tick_tickCnt) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/extender.scala 14:26]
-    node _tick_T = eq(tick_tickCnt, UInt<4>("h9")) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/extender.scala 17:18]
+    node _tick_T = eq(tick_tickCnt, UInt<3>("h4")) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/extender.scala 17:18]
     node _tick_tickCnt_T = add(tick_tickCnt, UInt<1>("h1")) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/extender.scala 21:26]
     node _tick_tickCnt_T_1 = tail(_tick_tickCnt_T, 1) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/extender.scala 21:26]
     node _GEN_0 = mux(_tick_T, UInt<1>("h0"), _tick_tickCnt_T_1) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/extender.scala 17:35 18:15 21:15]
@@ -158,7 +158,7 @@ circuit FSM :
       reset => (UInt<1>("h0"), CountTo16) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/DisplayMultiplexer1.scala 17:26]
     reg tick_tickCnt : UInt<32>, clock with :
       reset => (UInt<1>("h0"), tick_tickCnt) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/DisplayMultiplexer1.scala 21:26]
-    node _tick_T = eq(tick_tickCnt, UInt<4>("h9")) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/DisplayMultiplexer1.scala 23:18]
+    node _tick_T = eq(tick_tickCnt, UInt<3>("h4")) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/DisplayMultiplexer1.scala 23:18]
     node _tick_tickCnt_T = add(tick_tickCnt, UInt<1>("h1")) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/DisplayMultiplexer1.scala 27:26]
     node _tick_tickCnt_T_1 = tail(_tick_tickCnt_T, 1) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/DisplayMultiplexer1.scala 27:26]
     node _GEN_0 = mux(_tick_T, UInt<1>("h0"), _tick_tickCnt_T_1) @[Users/matthiaskristensen/GitHub/vending-machine/src/main/scala/DisplayMultiplexer1.scala 23:35 24:15 27:15]

@@ -28,7 +28,7 @@ class SevenSegDec extends Module {
     is(13.U) {sevSeg := "b0000000".U} // blank
     is(14.U) {sevSeg := "b1111001".U} // E
     is(15.U) {sevSeg := "b1110001".U}
-    }
+  }
 
   io.out := sevSeg
 }

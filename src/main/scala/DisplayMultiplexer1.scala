@@ -29,7 +29,8 @@ class DisplayMultiplexer(maxCount: Int) extends Module {
     tick
   }
   val tick = tickGenerator(maxCount)
-  val slowTick = tickGenerator(35000000)
+  val animationSpeed = if (maxCount < 1000) 20 else 35000000 // Purely for testing, will not generate anything and will be 35mil irl
+  val slowTick = tickGenerator(animationSpeed)
 
   when(tick) {CountTo4 := CountTo4 + 1.U}
   when(slowTick){CountTo16 := CountTo16 + 1.U}
