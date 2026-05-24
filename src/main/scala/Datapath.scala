@@ -17,13 +17,10 @@ class Datapath(maxCount: Int) extends Module {
   io.enough := (money > io.price - 1.U)
 
   switch(io.FSMstate){
-    is(0.U){money:=money}
     is(1.U){money:=money + 2.U}
     is(2.U){money:=money + 5.U}
-    is(3.U){money:=money}
     is(4.U){money:=money - io.price}
-    is(5.U){money:=money}
   }
+  
   io.money := money
-
 }
