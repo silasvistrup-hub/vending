@@ -16,7 +16,6 @@ class DisplayMultiplexer(maxCount: Int) extends Module {
   val FullSequence = RegInit(false.B)
   val CountTo16 = RegInit(0.U(4.W))
 
-
   def tickGenerator(max: Int): Bool = {
     val tickCnt = RegInit(0.U(32.W))
     val tick = WireDefault(false.B)
@@ -28,17 +27,18 @@ class DisplayMultiplexer(maxCount: Int) extends Module {
     }
     tick
   }
-  val tick = tickGenerator(maxCount)
-  val animationSpeed = if (maxCount < 1000) 20 else 35000000 // Purely for testing, will not generate anything and will be 35mil irl
-  val slowTick = tickGenerator(animationSpeed)
+  val animationSpeed1 = if (maxCount < 1000) maxCount else maxCount/100000 // Purely for testing, will not generate anything and will be 35mil irl
+  val tick = tickGenerator(animationSpeed1)
+  val animationSpeed2 = if (maxCount < 1000) 20 else 35000000 // Purely for testing, will not generate anything and will be 35mil irl
+  val slowTick = tickGenerator(animationSpeed2)
 
   when(tick) {CountTo4 := CountTo4 + 1.U}
   when(slowTick){CountTo16 := CountTo16 + 1.U}
 
   when(io.full) {
     FullSequence := true.B
-    CountTo16:=0.U}
-
+    CountTo16:=0.U
+  }
   when(CountTo16===10.U){FullSequence:=false.B}
 
   var number1 = WireDefault(0.U(4.W))

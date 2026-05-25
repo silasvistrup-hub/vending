@@ -58,6 +58,4 @@ class extender(maxCount: Int) extends Module {
 
   io.alarm := alarm
   io.releaseCan := releaseCan
-
-
 }
