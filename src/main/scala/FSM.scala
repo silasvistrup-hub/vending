@@ -36,7 +36,7 @@ class FSM(maxCount: Int) extends Module {
 
   val stateReg = RegInit(idleState)
   stateReg := idleState
-
+  //defines modules
   val extender = Module(new extender(maxCount))
   val DisplayMultiplexer = Module(new DisplayMultiplexer(maxCount))
   val Datapath = Module(new Datapath(maxCount))
@@ -53,11 +53,11 @@ class FSM(maxCount: Int) extends Module {
   val coin5Trigger = debCoin5 && !prevCoin5
   val buyTrigger = debBuy && !prevBuy
   val priceTrigger = io.price =/= prevPrice
-
+  //defines outputs from modules
   val Full2 = Datapath.io.Full2
   val Full5 = Datapath.io.Full5
   val enough = Datapath.io.enough
-
+  //The FSM itself
   switch(stateReg) {
     is(idleState) {
       when(coin2Trigger && !Full2) {
@@ -94,7 +94,7 @@ class FSM(maxCount: Int) extends Module {
 
   // Datapath
   Datapath.io.price := io.price
-
+  //connects outputs from modules to actual outputs
   io.alarm := extender.io.alarm
   io.releaseCan := extender.io.releaseCan
   io.seg := DisplayMultiplexer.io.seg

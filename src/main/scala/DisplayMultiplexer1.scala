@@ -31,16 +31,17 @@ class DisplayMultiplexer(maxCount: Int) extends Module {
   val tick = tickGenerator(animationSpeed1)
   val animationSpeed2 = if (maxCount < 1000) 20 else 35000000 // Purely for testing, will not generate anything and will be 35mil irl
   val slowTick = tickGenerator(animationSpeed2)
-
+  //counters
   when(tick) {CountTo4 := CountTo4 + 1.U}
   when(slowTick){CountTo16 := CountTo16 + 1.U}
-
+  //starts the full sequence and sets the counter
   when(io.full) {
     FullSequence := true.B
     CountTo16:=0.U
   }
+  //Makes sevenseg show price and sum again
   when(CountTo16===10.U){FullSequence:=false.B}
-
+  //flipflops with values for individual sevensegments
   var number1 = WireDefault(0.U(4.W))
   var number2 = WireDefault(0.U(4.W))
   var number3 = WireDefault(0.U(4.W))
@@ -49,13 +50,13 @@ class DisplayMultiplexer(maxCount: Int) extends Module {
   var Number1Full = RegInit(13.U(4.W))
   var Number4Full = RegInit(13.U(4.W))
   var Number3Full = RegInit(13.U(4.W))
-
+  //shifts all letters to the right at tick
   when(slowTick){
     Number3Full := Number4Full
     Number4Full := Number1Full
     Number1Full := Number2Full
   }
-
+  //sets the first letter in sequence
   switch(CountTo16) {
     is(0.U) {Number2Full := 13.U}
     is(1.U) {Number2Full := 12.U}
@@ -68,7 +69,7 @@ class DisplayMultiplexer(maxCount: Int) extends Module {
     is(8.U) {Number2Full := 13.U}
     is(9.U) {Number2Full := 13.U}
   }
-
+  //sets outputs based on value of FullSequence
   when(!FullSequence) {
     number1 := io.sum % 10.U
     number2 := io.sum / 10.U
@@ -82,7 +83,7 @@ class DisplayMultiplexer(maxCount: Int) extends Module {
   }
 
   decoder.io.in := 0.U
-
+  //determines which value to show based on the segments
   switch(CountTo4) {
     is("b10".U) {decoder.io.in := number1}
     is("b11".U) {decoder.io.in := number2}

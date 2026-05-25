@@ -26,7 +26,7 @@ class extender(maxCount: Int) extends Module {
 
   val tick = tickGenerator(maxCount)
   val countSec = RegInit(0.U(10.W))
-
+  // stores value of alarm and releaseCan
   val alarm = RegInit(false.B)
   val releaseCan = RegInit(false.B)
 
@@ -38,12 +38,12 @@ class extender(maxCount: Int) extends Module {
   when(tick && (alarm || releaseCan)) {
     countSec := countSec + 1.U
   }
-
+  //sets alarm to true based on rising edge of input ringAlarm
   when(ringAlarmTrigger) {
     alarm := true.B
     countSec := 0.U
   }
-  
+  //sets releaseCan to true based on rising edge of input releasing
   when(releasingTrigger) { 
     releaseCan := true.B
     countSec := 0.U
