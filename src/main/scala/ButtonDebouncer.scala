@@ -16,7 +16,7 @@ class ButtonDebouncer(maxCount: Int) extends Module {
   val btnDebReg = RegInit(false.B)
   val tickCnt = RegInit(0.U(4.W))
 
-  when (tickCnt === 4.U) { // 40 ms [Source: https://electronics.stackexchange.com/questions/50377/time-parameters-of-pressing-a-tact-button-by-people]
+  when (tickCnt === 4.U) { // 40 ms [Source 1]
     tickCnt := 0.U
     btnDebReg := sync
   }. otherwise {
