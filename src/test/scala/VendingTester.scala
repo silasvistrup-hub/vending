@@ -6,8 +6,8 @@ import org.scalatest.flatspec.AnyFlatSpec
 class VendingTester extends AnyFlatSpec with ChiselScalatestTester {
   behavior of "FSM Vending Machine"
 
-  it should "hold io.alarm and io.releaseCan high for 5 cycles" in {
-    test(new FSM(20)).withAnnotations(Seq(WriteVcdAnnotation)) { dut => 
+  it should "hold io.alarm and io.releaseCan high for 5 seconds" in {
+    test(new FSM(5)).withAnnotations(Seq(WriteVcdAnnotation)) { dut => 
       dut.io.price.poke(7.U)
       dut.clock.step(1)
 
@@ -19,23 +19,21 @@ class VendingTester extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.buy.poke(true.B) 
       dut.clock.step(4) // wait for debouncing and logic
       dut.io.buy.poke(false.B) 
-
       dut.clock.step(5) // wait for logic
 
-
       dut.io.alarm.expect(true.B)
-      dut.clock.step(80) 
+      dut.clock.step(20) 
 
       // Check if alarm stays on
       dut.io.alarm.expect(true.B)
-      dut.clock.step(20)
+      dut.clock.step(5)
 
       // Check if alarm shuts off after 5 cycles
       dut.io.alarm.expect(false.B)
 
       // Test io.releaseCan
       dut.io.coin5.poke(true.B) 
-      dut.clock.step(9)
+      dut.clock.step(4)
       dut.io.coin5.poke(false.B) 
 
       dut.io.buy.poke(true.B) 
@@ -43,11 +41,12 @@ class VendingTester extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.buy.poke(false.B) 
 
       dut.io.releaseCan.expect(true.B)
-      dut.clock.step(80) 
+      dut.clock.step(20) 
 
       // Check if alarm stays on
       dut.io.releaseCan.expect(true.B)
-      dut.clock.step(20)
+      dut.clock.step(5)
+      dut.io.releaseCan.expect(false.B)
     }
   }
 
@@ -87,14 +86,14 @@ class VendingTester extends AnyFlatSpec with ChiselScalatestTester {
       
       dut.io.an.expect("b0111".U)     // Seg: 4
       dut.io.seg.expect("b1000000".U) // 0
-      dut.io.price.poke(11.U)
+      dut.io.price.poke(12.U)
       dut.io.coin5.poke(true.B)
       dut.clock.step(5)
       dut.io.coin5.poke(false.B)
       dut.clock.step(5)
 
       dut.io.an.expect("b1110".U)     // Seg: 1
-      dut.io.seg.expect("b1111001".U) // 1
+      dut.io.seg.expect("b0100100".U) // 2
       dut.io.coin5.poke(true.B)
       dut.clock.step(5)
       dut.io.coin5.poke(false.B)
@@ -113,6 +112,7 @@ class VendingTester extends AnyFlatSpec with ChiselScalatestTester {
 
       dut.io.an.expect("b0111".U)     // Seg: 4
       dut.io.seg.expect("b1111001".U) // 1
+      dut.clock.step(10)
     }
   }
 

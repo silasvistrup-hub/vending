@@ -18,8 +18,6 @@ class FSM(maxCount: Int) extends Module {
     val an = Output(UInt(4.W))
     val tx = Output(Bool())
   })
-
-
   // Debouncing buttons
   //Coin2
   val ButtonDeb1 = Module(new ButtonDebouncer(maxCount/100))
